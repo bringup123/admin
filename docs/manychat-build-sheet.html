@@ -46,10 +46,14 @@ table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--li
 <p>שם התבנית: <span class="ltr">v3_welcome</span> · שפה: עברית · קטגוריה: Utility קודם (תשובה לטופס שהליד מילא — כך אושרה ב-3.9 הודעת הבחירה של דפנה); אם Meta מסרב או מסווג מחדש — Marketing</p>
 <p>גוף ההודעה:</p>
 <pre>היי {{1}}, כאן BringUp, חברת בוטיק שמתמחה בפתרונות AI פשוטים ויעילים לעסקים. תודה על הפנייה! נציגה מטעמנו תיצור איתך קשר בקרוב כדי להכיר את העסק ולתאם פגישת מיפוי צרכים עם שגיא.
-בינתיים, מוזמן לקרוא על תהליך האפיון וההטמעה שלנו בכתבה בדה-מרקר:
-https://www.themarker.com/labels/automation/2026-01-12/ty-article-labels/0000019b-b1c5-d612-ad9f-b7d7807c0000
-רוצה לקבוע כבר עכשיו? אפשר לתאם ישירות ביומן של שגיא בכפתור כאן למטה.</pre>
-<p>דוגמה ל-<span class="ltr">{{1}}</span>: דנה · כפתור: כמו למעלה.</p>
+בינתיים, מוזמן לקרוא על תהליך האפיון וההטמעה שלנו בכתבה בדה-מרקר.
+רוצה לקבוע כבר עכשיו? אפשר לתאם ישירות ביומן של שגיא.</pre>
+<p>דוגמה ל-<span class="ltr">{{1}}</span>: דנה</p>
+<p><b>שני כפתורים</b> (Call to action → Visit website), בסדר הזה — הכתובת הארוכה של הכתבה יוצאת מהטקסט ונכנסת לכפתור:</p>
+<ol>
+<li>טקסט: <b>לכתבה בדה-מרקר</b> · סוג: <b>Static</b> · כתובת:<pre class="ltr">https://www.themarker.com/labels/automation/2026-01-12/ty-article-labels/0000019b-b1c5-d612-ad9f-b7d7807c0000</pre></li>
+<li>טקסט: <b>לתיאום ביומן של שגיא</b> · סוג: <b>Dynamic</b> · כתובת: כמו למעלה.</li>
+</ol>
 <p><b>האוטומציה:</b> טריגר «Tag applied» = <span class="ltr">v3_welcome</span> ← שליחת תבנית <span class="ltr">v3_welcome</span>; גוף <span class="ltr">{{1}}</span> ← <span class="ltr">dafna_first_name</span>; כפתור <span class="ltr">{{1}}</span> ← <span class="ltr">dafna_lead_id</span>. שם: «V3: ברוכים הבאים».</p>
 </div>
 
