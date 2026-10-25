@@ -12,6 +12,7 @@ Categories: **Added** / **Changed** / **Fixed** / **Removed**.
 - **The rep's buttons now do something on the board:** pressing one marks the card, and the system (once it is connected) reads the mark, sends, and clears it. A press that cannot send says why on the card.
 - **A date column for demo meetings,** and a page with the three WhatsApp messages ready to submit to WhatsApp for approval.
 
+## 2026-10-25 — V3 starts
 
 ### Added
 - **A home for the new lead process.** Sagi is moving the Leads to an external sales rep who calls them herself. His brief is kept here word for word, with the tasks it becomes and what stands in the way.
