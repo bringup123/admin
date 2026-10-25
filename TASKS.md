@@ -31,7 +31,7 @@ T-002 (Sagi's answers) runs alongside; an answer may change a step.
 
 ## In progress
 
-### T-007: The service — welcome, buttons, bookings
+### T-007: The service — welcome, buttons, bookings ✓ code and tests 2026-10-25 (47 tests); proved live under T-011
 - priority: high · created: 2026-10-25
 - description: the service in `docs/ARCHITECTURE.md`: monday and cal.com webhooks, the welcome queue and its tick, the two buttons, the bookings of both event types, the switch page, the guards.
 - acceptance criteria: tests prove each flow and each guard — the kill switch, each message's switch, the cage, the daily cap, once-only, a stale press, a status a person set left alone, a demo booking kept apart from a needs-mapping one; typecheck clean.
@@ -44,7 +44,7 @@ T-002 (Sagi's answers) runs alongside; an answer may change a step.
   - [x] the dafna service — kill switch, 2026-10-25
   - [ ] the dafna service's per-path switches (A, settings screen): `CHOICE_FLOW_ENABLED`, `LEAD_INTAKE_ENABLED`, `OUTREACH_SEND`, `GREETING_SEND` off; `PRE_CALL_NOTICE_MINUTES=0`; `MAX_CALLS_PER_DAY=0`; queued `choice_timeout` cancelled
   - [ ] the dafna service's cal.com webhook (user-level) off — at the moment V3's go on (T-005)
-  - [ ] the eleven undocumented board webhooks named and, if they send, removed (A)
+  - [ ] the eleven undocumented board webhooks named and, if they send, removed (A) — **first 157508715 (status = «נקבעה פגישה»), which V3 will set off on every booking**
   - [ ] the ManyChat automations behind «ליד חדש», «נקבעה פגישה», «יום לפני פגישה», «שעה לפני פגישה», `wave2_*`, and Bringi's follow-ups (A)
   - [ ] the board's «הסתיים - לשמור על קשר» → «מעקב שליחת ווצאפ» loop into Make (A)
 
@@ -65,23 +65,24 @@ T-002 (Sagi's answers) runs alongside; an answer may change a step.
 
 ## Waiting
 
-### T-008: The board's half
+### T-008: The board's half ✓ 2026-10-25
 - priority: high · created: 2026-10-25
 - steps:
-  - [ ] status column «טריגר נציגה» with «3 שיחות לא נענו», «5 שיחות לא נענו»
-  - [ ] two automations: each button writes its label
-  - [ ] date column «תאריך פגישת דמו»
+  - [x] status column «טריגר נציגה» (`color_mm8f5qtn`) with «3 שיחות לא נענו», «5 שיחות לא נענו»
+  - [x] two automations: each button writes its label (1719626042, 1719626048)
+  - [x] date column «תאריך פגישת דמו» (`date_mm8frbxn`)
 
 ### T-003: Three templates through Meta, three ManyChat automations
 - priority: high · created: 2026-10-25
-- description: from `docs/manychat-build-sheet.md`.
+- description: from `docs/manychat-build-sheet.html`. The three tags exist (2026-10-25).
 - acceptance criteria: approved; each automation fires on its tag and sends its template.
 
 ### T-009: Deploy
 - priority: high · created: 2026-10-25
 - steps:
-  - [ ] a Vercel project on the BringUp team, linked to this repo
-  - [ ] its environment (`.env.example`), `APP_ENV=production`, the kill switch off at first boot
+  - [x] a Vercel project on the BringUp team, linked to this repo (`bringup-v3`)
+  - [x] its six non-secret variables
+  - [ ] **the eight secrets — a person imports `.env.vercel` (docs/SETUP.md)**
   - [ ] the `v3` schema created by the first boot; `/health` answers
 
 ### T-005: The demo meeting on cal.com

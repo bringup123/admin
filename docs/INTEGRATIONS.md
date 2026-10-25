@@ -24,6 +24,11 @@
 | 5 שיחות לא נענו | `button_mm8ffw41` | button | nothing behind it yet |
 | לינק לפגישת דמו | `link_mm8fn2g5` | link | empty |
 
+| טריגר נציגה | `color_mm8f5qtn` | status | «3 שיחות לא נענו» (label 0), «5 שיחות לא נענו» (label 2) — written by the buttons' automations only, cleared by V3 |
+| תאריך פגישת דמו | `date_mm8frbxn` | date + time | written by V3 on a demo booking |
+
+**The buttons' automations** (monday workflows, 2026-10-25): **1719626042** — «3 שיחות לא נענו» clicked → «טריגר נציגה» = «3 שיחות לא נענו»; **1719626048** — the same for 5. Neither reaches anything until the monday webhook on «טריגר נציגה» is registered (`scripts/monday-webhooks.ts`).
+
 **View «נציגה»**, id **59740922**: name, phone, email, company, status, the eleven columns above, «מועד פעולה הבאה» `date_mkkgbp9t`, «לינק לפגישה» `link_mm0w28s`; newest first.
 
 ### Sales status labels V3 uses
@@ -92,6 +97,10 @@ Board automations that feed a sender: «הסתיים - לשמור על קשר» 
 
 The Make organisation reachable from the claude.ai connector («Haruv», eu1) is **not** the one behind these webhooks: none of its scenarios touch this board.
 
+## Vercel
+
+- Team `admin-23308494s-projects` (`team_6ME8IIFubWy8tTVbDFG66PS0`). V3's project **`bringup-v3`** (`prj_UTZMLTJGDEtKm9uzFKRhQKNpwBDY`), linked to `bringup123/admin`, Vercel Authentication off (the routes check their own tokens; monday and cal.com must reach them). The dafna project is `prj_k3T4ljPOWzaZWZwO1WO6iubBYy14`.
+
 ## cal.com
 
 - Sagi's account. Needs-mapping event type id **6812251** (`CALCOM_EVENT_TYPE_ID`).
@@ -100,6 +109,9 @@ The Make organisation reachable from the claude.ai connector («Haruv», eu1) is
 - A booking finds its row by, in order: `metadata.itemId` (API bookings), the hidden booking question `dafna_lead` carrying the card id, then the attendee's email. Never by phone. A demo event type needs the same hidden question.
 
 ## ManyChat and Meta
+
+- **V3's tags** (created 2026-10-25 over the API): `v3_welcome` **99906572**, `v3_no_answer_3` **99906573**, `v3_no_answer_5` **99906574**. No automation behind them yet — `docs/manychat-build-sheet.html`. Adding one to a contact sends nothing until its automation exists.
+- **Fields V3 writes:** `dafna_first_name` **14918920**, `dafna_lead_id` **14899233** (both the dafna project's; reused).
 
 - Account «BringUp», Pro. API base `https://api.manychat.com`, token `MANYCHAT_API_TOKEN`.
 - Sending a template = set the contact's fields, add a tag; a ManyChat automation on that tag sends the Meta-approved template. A URL button can carry a variable tail; Meta only ever sees the ASCII base.
