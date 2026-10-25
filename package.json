@@ -1,0 +1,26 @@
+{
+  "name": "bringup-v3",
+  "version": "0.1.0",
+  "description": "BringUp customer journey V3 — the sales-rep process on the monday CRM",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "dependencies": {
+    "@hono/node-server": "2.1.0",
+    "hono": "4.13.1",
+    "pg": "8.23.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.4",
+    "@types/node": "26.2.0",
+    "@types/pg": "8.21.0",
+    "tsx": "4.23.12",
+    "typescript": "5.9.3",
+    "vitest": "4.1.10"
+  }
+}

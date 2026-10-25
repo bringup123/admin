@@ -1,18 +1,51 @@
 # ARCHITECTURE
 
-> What runs where. V3 has no code yet; this page holds the shape and the decision still open.
+> What runs where. Decided 2026-10-25 (`docs/DECISIONS.md`): **V3 is a small service in this repo**, and it takes over cal.com's webhook from the dafna service.
 
 ## The parts
 
-- **monday** — the CRM board is the system of record and the rep's workspace: her view, her columns, her two buttons. Status moves a person or a column value causes are monday automations.
-- **ManyChat** — the business line's WhatsApp. Each V3 message is a Meta-approved template behind a ManyChat automation triggered by a tag.
-- **cal.com** — Sagi's calendar: the needs-mapping event type and a new demo event type. A booking reaches the board by a webhook.
-- **A service** — what monday cannot do alone: read a new card, set the ManyChat fields and tag for the right contact, record that a message went once and only once, and route a cal.com booking to its row and status by event type.
+- **monday** — the CRM board (1753447162) is the system of record and the rep's workspace: her view «נציגה», her columns, her two buttons.
+- **ManyChat** — the business line's WhatsApp. Each V3 message is a Meta-approved template behind a ManyChat automation triggered by a tag. The service sets the contact's fields, then adds the tag; adding the tag is the send.
+- **cal.com** — Sagi's calendar: the needs-mapping event type (6812251) and a new demo event type. Each sends its bookings to the service.
+- **The service** (`src/`) — TypeScript, Hono, on Vercel; Postgres in the shared Supabase database, **schema `v3` only** (the dafna project's tables are in `public`, the journey's in `journey`).
 
-## Open decision — what sends V3's messages (T-004)
+## Flows
 
-1. **A small service in this repo.** Owns V3 end to end, nothing of Dafna's in the path. Needs hosting, a database for the once-only record, and its own webhooks on the board and in cal.com — and the cal.com webhook is user-level, so the dafna service would have to stop receiving bookings.
-2. **The dafna service, re-purposed.** Everything already exists there: ManyChat sending with guards, the once-only key, the button pattern (outreach), the cal.com listener. It needs a welcome path, two button routes and an event-type branch — and it stays the thing that is «stopped».
-3. **monday + ManyChat only.** A monday automation sends a webhook straight to ManyChat. No service at all, but no once-only guarantee, no card id in the booking link, and nothing to route a demo booking.
+### The welcome message
 
-Not decided. Put to the user with the trade-offs above.
+1. monday `create_item` webhook → `POST /webhooks/monday` → the card goes on `v3.welcome_queue`, due 90 seconds later. (A form or an automation fills the phone *after* creating the item; reading at once would find it empty.)
+2. Vercel cron, every minute → `GET /internal/tick` → each due card is read again.
+   - no valid phone yet and the card is under 30 minutes old → try again in 5 minutes; older → given up, with a note on the card.
+   - otherwise → the guards, then the `welcome` message, once per card for ever.
+3. After the send: the sales status becomes «נשלחה הודעה ראשונה» **only if it is still empty, «חדש» or «יש ליצור קשר»** (a status a person set is theirs); the card's empty «לינק לפגישה» and «לינק לפגישת דמו» cells get the card's own booking links.
+
+### The rep's two buttons
+
+monday has **no webhook for a button press** (proved in the dafna project) — a button can only run an automation. So:
+
+1. «3 שיחות לא נענו» / «5 שיחות לא נענו» (button) → a monday automation writes the matching label into the status column «טריגר נציגה».
+2. monday `change_specific_column_value` webhook on «טריגר נציגה» → `POST /webhooks/monday`.
+3. The service reads the card. **An empty trigger cell is a stale press** (monday retries deliveries for minutes) and is ignored. Otherwise the cell is cleared at once, then the guards, then the message, once per card per button.
+4. After the five-calls message: status «לבדיקת שגיא», «סיבת סגירה» = «לא ענה».
+5. Whatever happened is written on the card as an update, in Hebrew, so the rep sees why a press did or did not send.
+
+### Bookings
+
+cal.com webhook, **one per event type** (not user-level) → `POST /webhooks/calcom`, HMAC-signed.
+
+| | needs-mapping | demo |
+|---|---|---|
+| created | status «נקבעה פגישה», «תאריך פגישת אפיון», meeting link in «לינק לפגישה», change link | status «הצגת דמו», «תאריך פגישת דמו», meeting link in «לינק לפגישת דמו» |
+| rescheduled | the date and links | the date and link |
+| cancelled | date and links cleared, the booking link back in its cell, status «לבדיקת שגיא» **if still «נקבעה פגישה»** | the same for the demo columns, if still «הצגת דמו» |
+
+A booking finds its card by the hidden question `dafna_lead` (the card id, carried by every link V3 writes or sends), then by the attendee's email. Unmatched bookings are logged. **No WhatsApp is sent on a booking** until Sagi answers whether meeting confirmations and reminders stay (cal.com's own email invitation goes regardless).
+
+## Safety rails
+
+- **Kill switch** — `v3.control.interactions_enabled`, **off at first boot**. The bookmark `GET /kill?token=…` stops everything that reaches a Lead; the switch page `/switch?token=…` shows and sets every switch.
+- **One switch per message** — `welcome`, `no_answer_3`, `no_answer_5`, all off by default, on the switch page.
+- **The cage** — `allowlist_only`, on by default **even in production**: only `PHONE_ALLOWLIST` numbers are messaged until it is opened. Outside production the allowlist always applies, whatever the switch says.
+- **Daily cap** — `MAX_MESSAGES_PER_DAY`; a bug hits a wall.
+- **Once only** — every message has a dedupe key (`welcome:<item>`, `no_answer_3:<item>`, `no_answer_5:<item>`); a second attempt sends nothing.
+- **Never renames or creates a board label.** Status writes name an existing label; a label that is not there is an error, not a new label (the status column is full at 40).

@@ -8,3 +8,4 @@
 | `SETUP.md` | Access and credentials. |
 
 Sagi's brief, verbatim: `../spec/sagi-brief-2026-10-25.md`.
+| `manychat-build-sheet.html` | **Hebrew.** The three templates for Meta and the three ManyChat automations behind them, every value to copy. |

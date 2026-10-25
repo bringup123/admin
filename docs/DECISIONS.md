@@ -4,6 +4,18 @@ Every material architectural or product decision is recorded here **the moment i
 
 ---
 
+## 2026-10-25 — V3 is a service in this repo, and cal.com's webhook moves here
+
+- **Decision:** V3's messages and bookings are handled by a small service here (option 1 of the three), and the cal.com webhook is copied from the dafna service into it. (Ayala, «תעתיק את הוובהוק של קל קום לאדמין».)
+- **Shape:** TypeScript + Hono on Vercel (the dafna project's proven shape); the shared Supabase Postgres, **schema `v3` alone**, pinned per connection as in `bringup-journey`; Vercel cron every minute.
+- **cal.com webhooks per event type, not per user.** The dafna service's user-level webhook takes every booking on Sagi's account as a needs-mapping meeting. V3 subscribes on its two event types only, and **the dafna service's user-level webhook is switched off** at the same moment — otherwise both write the same card, and a demo booking is marked «נקבעה פגישה».
+- **The buttons go through a trigger status column**, because monday has no webhook for a button press (proved in the dafna project, DECISIONS 2026-09-09). A label arriving over an empty cell is a stale retry and is ignored.
+- **The welcome waits 90 seconds and re-reads the card,** because the item is created before its phone is filled.
+- **The card id travels in the booking link as `?dafna_lead=<id>`,** reusing the hidden question already on Sagi's event type and ManyChat's `dafna_lead_id` field. In a template button the base ends in `?dafna_lead=` and the variable is the id alone — Meta percent-encodes the variable, so the `?` must be in the base (dafna DECISIONS 2026-09-03, ninth).
+- **Rejected:** the dafna service re-purposed (it is the thing that was stopped; its intake, nudge and dial paths would all have to be proved off); monday + ManyChat alone (no once-only, no card id in the link, nothing to route a demo booking).
+
+---
+
 ## 2026-10-25 — V3 lives in this repo
 
 - **Decision:** customer journey V3 — the sales-rep process — is documented and built in `bringup123/admin`. The dafna repo records only that Dafna stopped. (Ayala, 2026-10-25.)
