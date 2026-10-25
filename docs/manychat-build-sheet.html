@@ -34,15 +34,16 @@ table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--li
 <h2>כתובת הכפתור — זהה בשלוש התבניות</h2>
 <div class="card">
 <p>סוג: כפתור URL, <b>דינמי</b>. טקסט הכפתור: <b>לתיאום ביומן של שגיא</b></p>
-<p>כתובת בסיס (להעתיק כמו שהיא, כולל הסוף <span class="ltr">?dafna_lead=</span>):</p>
-<pre class="ltr">https://cal.com/sagi-goldberger-xnuzdu/%D7%9E%D7%99%D7%A4%D7%95%D7%99-%D7%A6%D7%A8%D7%9B%D7%99%D7%9D-%D7%9E%D7%A2%D7%A8%D7%9B%D7%AA-%D7%9C%D7%A2%D7%A1%D7%A7?dafna_lead={{1}}</pre>
+<p>ב-ManyChat: Call to action → Visit website → <b>Dynamic</b>. כתובת בסיס — להעתיק כמו שהיא, כולל הסוף <span class="ltr">?dafna_lead=</span>, <b>בלי</b> להקליד <span class="ltr">{{1}}</span> (ManyChat מוסיף את המשתנה בעצמו):</p>
+<pre class="ltr">https://cal.com/sagi-goldberger-xnuzdu/%D7%9E%D7%99%D7%A4%D7%95%D7%99-%D7%A6%D7%A8%D7%9B%D7%99%D7%9D-%D7%9E%D7%A2%D7%A8%D7%9B%D7%AA-%D7%9C%D7%A2%D7%A1%D7%A7?dafna_lead=</pre>
 <p>דוגמה ל-Meta עבור <span class="ltr">{{1}}</span>: <span class="ltr">3203379334</span></p>
+<p>איפה: ManyChat → Message Templates → New Template. את המשתנה בגוף ההודעה מוסיפים בכפתור המשתנים ובוחרים מהרשימה — לא מקלידים את השם.</p>
 <p class="note">למה כך: Meta מקודד את החלק המשתנה, ולכן ה-<span class="ltr">?</span> חייב להיות בבסיס והמשתנה הוא רק ספרות (נבדק בפרויקט דפנה, 3.9). זה בדיוק המבנה של תבניות ה-<span class="ltr">_id</span> של דפנה שאושרו.</p>
 </div>
 
 <h2>1 · הודעת ברוכים הבאים</h2>
 <div class="card">
-<p>שם התבנית: <span class="ltr">v3_welcome</span> · שפה: עברית · קטגוריה: Marketing (יש בה כתבה — Meta כנראה יסווג כך גם אם נבקש Utility)</p>
+<p>שם התבנית: <span class="ltr">v3_welcome</span> · שפה: עברית · קטגוריה: Utility קודם (תשובה לטופס שהליד מילא — כך אושרה ב-3.9 הודעת הבחירה של דפנה); אם Meta מסרב או מסווג מחדש — Marketing</p>
 <p>גוף ההודעה:</p>
 <pre>היי {{1}}, כאן BringUp, חברת בוטיק שמתמחה בפתרונות AI פשוטים ויעילים לעסקים. תודה על הפנייה! נציגה מטעמנו תיצור איתך קשר בקרוב כדי להכיר את העסק ולתאם פגישת מיפוי צרכים עם שגיא.
 בינתיים, מוזמן לקרוא על תהליך האפיון וההטמעה שלנו בכתבה בדה-מרקר:
