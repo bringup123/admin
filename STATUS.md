@@ -18,7 +18,7 @@
 
 ## Stopped here — the next step is a person's
 
-**T-009, the deploy, waits on eight secrets in Vercel.** The session that wrote them may not hand credentials to the Vercel connector, so a person imports them: Vercel → `bringup-v3` → Settings → Environment Variables → import the session's `.env.vercel` (Production, Sensitive). Five of the eight were generated in that session and exist nowhere else — if the session is gone before they are imported, generate new ones (docs/SETUP.md). Then a deploy, `/health`, and the wiring (`docs/SETUP.md`, «Wiring»).
+**T-009, the deploy, waits on eight secrets in Vercel.** The session that wrote them may not hand credentials to the Vercel connector, so a person imports them: Vercel → `bringup-v3` → Settings → Environment Variables → import the session's `.env.vercel` (Production, Sensitive). Five of the eight were generated in that session and exist nowhere else — if the session is gone before they are imported, generate new ones (docs/SETUP.md). Then a redeploy (variables apply to new deployments only), `https://bringup-v3.vercel.app/health`, and the wiring (`docs/SETUP.md`, «Wiring»).
 
 ## Next, in order (TASKS.md, «The whole road»)
 
