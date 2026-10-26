@@ -1,9 +1,10 @@
 import { STATUS } from '../board.js';
-import type { CardWrite, Clock, CrmPort } from '../ports.js';
+import type { CardWrite, Clock, CrmPort, MessengerPort } from '../ports.js';
 import type { Db } from '../db/db.js';
 import type { Env } from '../env.js';
 import { bookingPage, CALCOM_LEAD_QUESTION, cardBookingUrl } from './links.js';
 import { BOOKING_LINK_TEXT, DEMO_LINK_TEXT } from './welcome.js';
+import { meetCode, meetingWhen, MEETING_HE } from './reminders.js';
 
 // What cal.com tells V3 after the fact. Copied from the dafna project
 // (src/domain/calcom-webhook.ts, live since 2026-09-03) and cut to what V3
@@ -87,6 +88,8 @@ export interface CalcomDeps {
   db: Db;
   env: Env;
   crm: CrmPort;
+  /** The meeting is copied onto the Lead's ManyChat contact. */
+  messenger: MessengerPort;
   /** When a booking was recorded: a meeting booked inside a reminder's
    *  window gets no reminder for it (src/domain/reminders.ts). */
   clock: Clock;
@@ -199,6 +202,7 @@ export async function handleCalcomWebhook(deps: CalcomDeps, body: unknown): Prom
       // A move keeps whatever status the card has now.
       await crm.updateCard(itemId, dates);
       await log('meeting_rescheduled', itemId, { from: row.uid, to: ev.uid, start: ev.start.toISOString(), meeting: row.meeting });
+      await meetingToContact(deps, itemId, row.meeting, ev.start, ev.uid, ev.meetingUrl);
       return { outcome: 'rescheduled', itemId, meeting: row.meeting };
     }
     // A reschedule of a booking V3 never saw is treated as a new booking.
@@ -247,6 +251,7 @@ export async function handleCalcomWebhook(deps: CalcomDeps, body: unknown): Prom
     `נקבעה ${meeting === 'demo' ? 'פגישת דמו' : 'פגישת מיפוי צרכים'} ב-Cal.com ל-${formatIsrael(ev.start, env.timezone)}. שינוי/ביטול: ${bookingPage(ev.uid)}`
   );
   await log('meeting_booked', itemId, { uid: ev.uid, meeting, start: ev.start.toISOString() });
+  await meetingToContact(deps, itemId, meeting, ev.start, ev.uid, ev.meetingUrl);
   return { outcome: 'booked', itemId, meeting };
 }
 
@@ -265,4 +270,47 @@ async function matchByEmail(deps: CalcomDeps, ev: CalcomEvent): Promise<string |
     if (hit) return hit;
   }
   return null;
+}
+
+/** The meeting onto the Lead's ManyChat contact, so a person reading the
+ *  contact sees it and an automation can use it (Ayala, 2026-10-26). The
+ *  latest booking wins; the reminders write the same fields again just before
+ *  they send, so a contact with two meetings is reminded of the right one.
+ *  Nothing is sent, and a contact is never created here: a Lead V3 has never
+ *  messaged has none, and gets one with their first message. */
+async function meetingToContact(
+  deps: CalcomDeps,
+  itemId: string,
+  meeting: Meeting,
+  start: Date,
+  uid: string,
+  meetingUrl?: string
+): Promise<void> {
+  const { db, env, messenger } = deps;
+  try {
+    const contactId = await messenger.findContactByLeadId(itemId);
+    if (!contactId) {
+      await db.query('insert into events (type, monday_item_id, payload) values ($1, $2, $3)', [
+        'meeting_no_contact',
+        itemId,
+        JSON.stringify({ uid }),
+      ]);
+      return;
+    }
+    const code = meetCode(meetingUrl);
+    await messenger.setFields(contactId, {
+      V3_Meeting_Type: MEETING_HE[meeting],
+      V3_Meeting_When: meetingWhen(start, env.timezone),
+      V3_Booking_Uid: uid,
+      ...(meetingUrl ? { V3_Meeting_Link: meetingUrl } : {}),
+      ...(code ? { V3_Meet_Code: code } : {}),
+    });
+  } catch (err) {
+    // The board is written already; a ManyChat failure costs only the copy.
+    await db.query('insert into events (type, monday_item_id, payload) values ($1, $2, $3)', [
+      'meeting_contact_failed',
+      itemId,
+      JSON.stringify({ uid, error: err instanceof Error ? err.message.slice(0, 500) : String(err) }),
+    ]);
+  }
 }

@@ -24,7 +24,7 @@ const MOTZEI_SHABBAT_HOUR = 21;
 /** From Friday afternoon. */
 const SHABBAT_FROM_HOUR = 15;
 
-const MEETING_HE: Record<Meeting, string> = { needs_mapping: 'פגישת מיפוי הצרכים', demo: 'פגישת הדמו' };
+export const MEETING_HE: Record<Meeting, string> = { needs_mapping: 'פגישת מיפוי הצרכים', demo: 'פגישת הדמו' };
 const KIND_HE: Record<ReminderKind, string> = { reminder_day: 'יום לפני', reminder_hour: 'שעה לפני' };
 
 interface WallTime {

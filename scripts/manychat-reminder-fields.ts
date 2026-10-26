@@ -13,6 +13,7 @@ const FIELDS: Array<{ name: string; description: string }> = [
   { name: 'V3_Meeting_Type', description: 'V3 reminders: «פגישת מיפוי הצרכים» or «פגישת הדמו»' },
   { name: 'V3_Meeting_When', description: 'V3 reminders: the whole moment, «יום רביעי, 28.10 בשעה 11:00»' },
   { name: 'V3_Meet_Code', description: 'V3 reminders: the Google Meet code alone, abc-defg-hij — the button variable' },
+  { name: 'V3_Meeting_Link', description: 'V3: the whole meeting link (Google Meet), written on every booking' },
   { name: 'V3_Booking_Uid', description: 'V3 reminders: the cal.com booking uid — https://cal.com/booking/{{1}} reschedules' },
 ];
 const TAGS = ['v3_reminder_day', 'v3_reminder_hour'];

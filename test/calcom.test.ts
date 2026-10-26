@@ -149,4 +149,30 @@ describe('POST /webhooks/calcom', () => {
     const res = await h.app.request('/webhooks/calcom', { method: 'POST', body: raw, headers: { 'x-cal-signature-256': sign(raw, '') } });
     expect(res.status).toBe(403);
   });
+
+  it('the meeting is copied onto the Lead’s ManyChat contact, and a missing contact is not made', async () => {
+    const h = await harness();
+    h.crm.add(card({ id: '30', status: 'נשלחה הודעה ראשונה' }));
+    h.messenger.contacts.set('c9', { phone: '+972501112233', itemId: '30' });
+    await handleCalcomWebhook(h.deps, booking({ videoCallData: { url: 'https://meet.google.com/abc-defg-hij' } }));
+    expect(h.messenger.fields).toEqual([
+      {
+        contactId: 'c9',
+        fields: {
+          V3_Meeting_Type: 'פגישת מיפוי הצרכים',
+          V3_Meeting_When: 'יום רביעי, 28.10 בשעה 11:00',
+          V3_Booking_Uid: 'u1',
+          V3_Meeting_Link: 'https://meet.google.com/abc-defg-hij',
+          V3_Meet_Code: 'abc-defg-hij',
+        },
+      },
+    ]);
+    expect(h.messenger.tags).toEqual([]);
+
+    const h2 = await harness();
+    h2.crm.add(card({ id: '30' }));
+    expect((await handleCalcomWebhook(h2.deps, booking())).outcome).toBe('booked');
+    expect(h2.messenger.contacts.size).toBe(0);
+    expect(h2.messenger.fields).toEqual([]);
+  });
 });

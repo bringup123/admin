@@ -40,7 +40,7 @@ cal.com webhook, **one per event type** (not user-level) → `POST /webhooks/cal
 | rescheduled | the date and links | the date and link |
 | cancelled | date and links cleared, the booking link back in its cell, status «לבדיקת שגיא» **if still «נקבעה פגישה»** | the same for the demo columns, if still «נקבעה פגישת דמו» |
 
-A booking finds its card by the hidden question `dafna_lead` (the card id, carried by every link V3 writes or sends), then by the attendee's email. Unmatched bookings are logged. No WhatsApp is sent at the moment of booking (cal.com's own email invitation goes regardless).
+Every booking and move is also copied onto the Lead's ManyChat contact, if there is one (`V3_Meeting_When`, `V3_Meeting_Type`, `V3_Meeting_Link`, `V3_Meet_Code`, `V3_Booking_Uid`) — nothing is sent. A booking finds its card by the hidden question `dafna_lead` (the card id, carried by every link V3 writes or sends), then by the attendee's email. Unmatched bookings are logged. No WhatsApp is sent at the moment of booking (cal.com's own email invitation goes regardless).
 
 ### Meeting reminders (`src/domain/reminders.ts`, 2026-10-26)
 
