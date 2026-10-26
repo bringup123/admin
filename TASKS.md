@@ -43,7 +43,7 @@ T-002 (Sagi's answers) runs alongside; an answer may change a step.
 - steps:
   - [x] the dafna service — kill switch, 2026-10-25
   - [ ] the dafna service's per-path switches (A, settings screen): `CHOICE_FLOW_ENABLED`, `LEAD_INTAKE_ENABLED`, `OUTREACH_SEND`, `GREETING_SEND` off; `PRE_CALL_NOTICE_MINUTES=0`; `MAX_CALLS_PER_DAY=0`; queued `choice_timeout` cancelled
-  - [ ] the dafna service's cal.com webhook (user-level) off — at the moment V3's go on (T-005)
+  - [x] the dafna service's cal.com webhook (user-level) off — 1358828b…, 2026-10-26, with V3's going on (T-005)
   - [ ] the eleven undocumented board webhooks named and, if they send, removed (A) — **first 157508715 (status = «נקבעה פגישה»), which V3 will set off on every booking**
   - [ ] the ManyChat automations behind «ליד חדש», «נקבעה פגישה», «יום לפני פגישה», «שעה לפני פגישה», `wave2_*`, and Bringi's follow-ups (A)
   - [ ] the board's «הסתיים - לשמור על קשר» → «מעקב שליחת ווצאפ» loop into Make (A)
@@ -76,27 +76,32 @@ T-002 (Sagi's answers) runs alongside; an answer may change a step.
 - priority: high · created: 2026-10-25
 - description: from `docs/manychat-build-sheet.html`. The three tags exist (2026-10-25).
 - acceptance criteria: approved; each automation fires on its tag and sends its template.
+- steps:
+  - [x] the welcome — approved, automation on `v3_welcome` built (Y); proved on Ayala's handset 2026-10-26
+  - [x] «3 שיחות לא נענו» — approved 2026-10-26 (Y); the `no_answer_3` switch on, cage on
+  - [ ] «5 שיחות לא נענו» — template and automation (Y)
 
-### T-009: Deploy
+### T-009: Deploy ✓ 2026-10-26
 - priority: high · created: 2026-10-25
 - steps:
   - [x] a Vercel project on the BringUp team, linked to this repo (`bringup-v3`)
   - [x] its six non-secret variables
-  - [ ] **the eight secrets — a person imports `.env.vercel` (docs/SETUP.md)**
-  - [ ] the `v3` schema created by the first boot; `/health` answers
+  - [x] the eight secrets (Ayala, 2026-10-26)
+  - [x] the `v3` schema created by the first boot; `/health` answers (2026-10-26)
 
-### T-005: The demo meeting on cal.com
+### T-005: The demo meeting on cal.com ✓ wired 2026-10-26; proved under T-011
 - priority: high · created: 2026-10-25
 - steps:
-  - [ ] a fresh API key on Sagi's account (S) — the shared one is expired
-  - [ ] the demo event type, with the hidden question `dafna_lead` (S, or C with the key)
-  - [ ] webhooks on both event types → V3; the user-level one → off (C)
+  - [x] a fresh API key on Sagi's account (S, 2026-10-26)
+  - [x] the demo event type 7638021 (S), the hidden question `dafna_lead` added (C, 2026-10-26)
+  - [x] webhooks on both event types → V3; the user-level one → off (C, 2026-10-26)
+  - [ ] a demo booking and a needs-mapping booking from the test card, then a reschedule and a cancel (T-011)
 
-### T-010: monday webhooks
+### T-010: monday webhooks ✓ 2026-10-26
 - priority: high · created: 2026-10-25
 - steps:
-  - [ ] `create_item` → V3
-  - [ ] `change_specific_column_value` on «טריגר נציגה» → V3
+  - [x] `create_item` → V3 (190950292, 2026-10-26)
+  - [x] `change_specific_column_value` on «טריגר נציגה» → V3 (190950293, 2026-10-26)
 
 ### T-011: The proof
 - priority: high · created: 2026-10-25

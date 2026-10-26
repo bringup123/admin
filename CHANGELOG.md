@@ -4,6 +4,20 @@ All material changes to the project, newest first.
 Format follows [Keep a Changelog](https://keepachangelog.com/); written in business language, readable by a non-technical reader.
 Categories: **Added** / **Changed** / **Fixed** / **Removed**.
 
+## 2026-10-26 — The welcome reaches a telephone, and the demo meeting has its own link
+
+### Added
+- **The first welcome arrived** — on Ayala's own handset, from a test card. Every message is still limited to test numbers.
+- **A separate booking page for the demo meeting.** Sagi made it on cal.com; a demo booked there now marks the card «נקבעה פגישת דמו» with its date, and a needs-mapping meeting still marks «נקבעה פגישה» — the two are no longer confused. Rescheduling moves the date; a cancellation clears it and hands the card to Sagi.
+- **The message after three unanswered calls is approved** by WhatsApp and switched on for test numbers.
+- **In ManyChat, each contact now carries the Lead's first name and a link straight to their card.**
+
+### Changed
+- **The old system no longer hears about meetings.** Dafna's connection to the calendar is switched off; only the new system reads bookings.
+
+### Fixed
+- **A card whose status label had been deleted from the board was left half-written** and got a confusing «already sent» note. Now the missing label is skipped, the rest is written, and nothing is sent twice.
+
 ## 2026-10-25 (evening) — The system behind the rep is written
 
 ### Added

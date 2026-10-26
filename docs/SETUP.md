@@ -24,8 +24,8 @@ Every test boots its own PGlite database with the `v3` schema; nothing reaches a
 | `CRON_SECRET` | yes | generated for V3; Vercel sends it to `/internal/tick` |
 | `APP_ENV` | no | `production` on Vercel, nothing locally |
 | `MONDAY_BOARD_ID` · `CALCOM_EVENT_TYPE_ID` · `BOOKING_URL` · `PHONE_ALLOWLIST` · `MAX_MESSAGES_PER_DAY` | no | set on Vercel 2026-10-25 |
-| `CALCOM_DEMO_EVENT_TYPE_ID` · `DEMO_BOOKING_URL` | no | when the demo event type exists |
-| `CALCOM_API_KEY` | yes | scripts only, not the service; **the shared one is expired** |
+| `CALCOM_DEMO_EVENT_TYPE_ID` · `DEMO_BOOKING_URL` | no | set on Vercel 2026-10-26: `7638021`, Sagi's demo page |
+| `CALCOM_API_KEY` | yes | scripts only, not the service; Sagi's new key (2026-10-26) — the shared one is expired |
 
 The five generated secrets were made on 2026-10-25 in a cloud session and exist only in that session's `.env` and in Vercel once imported. **Vercel is where they live.** A new session that needs them reads them in Vercel's dashboard (they are «sensitive», so only by re-entering them) — if lost, generate new ones, put them in Vercel, and re-register the webhooks that carry them.
 

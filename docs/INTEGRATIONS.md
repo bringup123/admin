@@ -113,9 +113,14 @@ Off: both other `create_item` webhooks (125529381, 153342135), the three-monthly
 
 ## cal.com
 
-- Sagi's account. Needs-mapping event type id **6812251** (`CALCOM_EVENT_TYPE_ID`).
-- **The API key in the shared `.env` is expired** (2026-10-25, `401 Your api key is expired`).
-- The webhook is user-level and points at the dafna service (`/webhooks/calcom`), which **ignores `eventTypeId`**: every booking on any of Sagi's event types is recorded as a needs-mapping meeting («נקבעה פגישה», date, Meet link, confirmation and reminders).
+- Sagi's account (`sagi-goldberger-xnuzdu`). Two event types V3 reads:
+  - **needs-mapping, 6812251** (`CALCOM_EVENT_TYPE_ID`) → «נקבעה פגישה», «תאריך פגישת אפיון», the meeting and change links.
+  - **demo, 7638021** «פגישת דמו עם שגיא», 30 min, `https://cal.com/sagi-goldberger-xnuzdu/פגישת-דמו-עם-שגיא` (`CALCOM_DEMO_EVENT_TYPE_ID`, `DEMO_BOOKING_URL`; Sagi made it 2026-10-26) → «נקבעה פגישת דמו», «תאריך פגישת דמו», «לינק לפגישת דמו».
+  - A booking on any other of Sagi's event types is ignored.
+- **The hidden question `dafna_lead`** (text, hidden, optional) was added to 7638021 over the API on 2026-10-26; 6812251 already had it. The PATCH replaced the booking fields, and cal.com dropped the system field `attendeePhoneNumber`, which was hidden and optional there — nothing the booker saw changed.
+- **Webhooks, per event type, since 2026-10-26** — both to `https://bringup-v3.vercel.app/webhooks/calcom`, on created / rescheduled / cancelled, signed with `CALCOM_WEBHOOK_SECRET`: **1b19cbe4-96bb-42b6-a965-14f51cacfb35** on 6812251, **1c5b1835-1b91-47a9-8bb4-2eb5147c1e75** on 7638021. `scripts/calcom-webhooks.ts --url … --apply` creates or refreshes them.
+- **The dafna service's user-level webhook 1358828b-d7eb-4d91-9d24-b5dad6b7570f is switched off** (inactive, not deleted) at the same moment, 2026-10-26. It ignored `eventTypeId` and recorded every booking on Sagi's account as needs-mapping. Undo: `active: true` on that id — but then both services write the same card.
+- **API key:** Sagi's new key, 2026-10-26, in the session's `.env` only (scripts, not the service). It passed through the chat — rotate it once V3 is proved. The key in the shared `.env` is expired.
 - A booking finds its row by, in order: `metadata.itemId` (API bookings), the hidden booking question `dafna_lead` carrying the card id, then the attendee's email. Never by phone. A demo event type needs the same hidden question.
 
 ## ManyChat and Meta
