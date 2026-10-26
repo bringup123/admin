@@ -16,7 +16,8 @@
 1. monday `create_item` webhook → `POST /webhooks/monday` → the card goes on `v3.welcome_queue`, due 90 seconds later. (A form or an automation fills the phone *after* creating the item; reading at once would find it empty.)
 2. Vercel cron, every minute → `GET /internal/tick` → each due card is read again.
    - no valid phone yet and the card is under 30 minutes old → try again in 5 minutes; older → given up, with a note on the card.
-   - otherwise → the guards, then the `welcome` message, once per card for ever.
+   - a status that no longer says «new» (anything but empty, «חדש», «יש ליצור קשר», «נשלחה הודעה ראשונה») → not welcomed: a card made by hand for an old customer or a deal is not a new Lead.
+   - otherwise → the guards, then the `welcome` message, once per card for ever. The message is the service finding or creating the ManyChat contact, writing `dafna_first_name` and `dafna_lead_id`, and adding `v3_welcome`; Ayala's ManyChat automation on that tag sends the template.
 3. After the send: the sales status becomes «נשלחה הודעה ראשונה» **only if it is still empty, «חדש» or «יש ליצור קשר»** (a status a person set is theirs); the card's empty «לינק לפגישה» and «לינק לפגישת דמו» cells get the card's own booking links.
 
 ### The rep's two buttons

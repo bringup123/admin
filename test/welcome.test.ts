@@ -37,6 +37,22 @@ describe('the welcome message', () => {
     expect(c.meetingLink).toBe('https://meet.example/x');
   });
 
+  it('welcomes only a card whose status still says it is new', async () => {
+    const h = await harness();
+    await h.on('interactions_enabled', 'welcome');
+    h.crm.add(card({ id: '16', status: 'הצעת מחיר' }));
+    h.crm.add(card({ id: '17', status: '' }));
+    await enqueueWelcome(h.deps, '16');
+    await enqueueWelcome(h.deps, '17');
+    h.clock.advance(FIRST_DELAY_MS);
+    expect(await runWelcomeQueue(h.deps)).toEqual([
+      { itemId: '16', outcome: 'not_a_new_lead' },
+      { itemId: '17', outcome: 'sent' },
+    ]);
+    expect(h.crm.cards.get('16')!.status).toBe('הצעת מחיר');
+    expect(h.crm.cards.get('17')!.status).toBe('נשלחה הודעה ראשונה');
+  });
+
   it('waits for a phone that is filled after the card is created, and gives up after half an hour', async () => {
     const h = await harness();
     await h.on('interactions_enabled', 'welcome');

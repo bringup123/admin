@@ -33,6 +33,15 @@ export const STATUS = {
  *  else on the card was put there by a person, or by a booking, and is theirs. */
 export const WELCOME_OVERWRITES = ['', 'חדש', 'יש ליצור קשר'];
 
+/** A card is a new Lead to welcome only while its status still says so
+ *  (Ayala, 2026-10-26: «a new lead in status new lead»). A form leaves the
+ *  status empty; the board stamps «יש ליצור קשר» on empty cards at noon; and
+ *  until its intake is switched off, the dafna service writes «נשלחה הודעה
+ *  ראשונה» within seconds of a card arriving — without sending anything while
+ *  its kill switch is on. A card created by hand in any other status (an old
+ *  customer, a deal) is not welcomed. */
+export const WELCOME_STATUSES = [...WELCOME_OVERWRITES, 'נשלחה הודעה ראשונה'];
+
 export const CLOSE_REASON_NO_ANSWER = 'לא ענה';
 
 /** The trigger column's labels, and the message each one sends. */

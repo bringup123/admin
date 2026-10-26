@@ -31,6 +31,8 @@
 
 ## Blockers and risks
 
+- **The dafna service is still writing to new cards while its kill switch is on.** Read off the board on 2026-10-26: card 3308222546, created 25.10 at 20:04 UTC — five hours after the kill switch — got «נשלחה הודעה ראשונה», «תתקשר» and a booking link from it (user 111299087), and 3307165902 was moved to «נורצ'ר» by its 24-hour nudge the same evening. The kill switch stops what it *sends*; its intake and its labels go on. Two consequences: the cards say a first message went when it did not, and **whatever it queued is parked, not cancelled — lifting its kill switch would send it.** Aleksei: `LEAD_INTAKE_ENABLED` off and the queued work cancelled (T-001). V3 tolerates the label: «נשלחה הודעה ראשונה» still counts as a new Lead.
+
 - **The cal.com API key in the shared `.env` is expired.** Needed for the webhooks and the demo event type.
 - **Writing «נקבעה פגישה» may set off an old confirmation message.** Webhook 157508715 fires on that label and is not the dafna service's — very likely the ManyChat «אישור קביעת פגישה» flow via Make. V3 writes that label on every needs-mapping booking. It must be identified and switched off (T-001) before V3's cal.com webhooks go on — and it fires today already, whenever anyone sets the label by hand.
 - **Any cal.com booking is still recorded by the dafna service as needs-mapping** (account-wide webhook, no event-type check). No demo link goes out until that webhook is off.

@@ -1,4 +1,4 @@
-import { STATUS, WELCOME_OVERWRITES } from '../board.js';
+import { STATUS, WELCOME_OVERWRITES, WELCOME_STATUSES } from '../board.js';
 import type { CrmPort } from '../ports.js';
 import { cardBookingUrl } from './links.js';
 import { normalizePhone } from './phone.js';
@@ -61,6 +61,10 @@ export async function runWelcomeQueue(deps: WelcomeDeps, limit = 20): Promise<Ou
       const card = await crm.getCard(itemId);
       if (!card) {
         await settle('skipped', 'not_on_board');
+        continue;
+      }
+      if (!WELCOME_STATUSES.includes(card.status)) {
+        await settle('skipped', 'not_a_new_lead');
         continue;
       }
       if (!normalizePhone(card.phone)) {
