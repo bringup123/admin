@@ -66,6 +66,7 @@ describe('sendMessage guards', () => {
     expect(h.messenger.fields[0]?.fields).toEqual({
       dafna_lead_id: '1',
       dafna_first_name: 'דנה',
+      V3_Name: 'דנה',
       MOID: 'https://bringup-io.monday.com/boards/1753447162/views/23542451/pulses/1',
     });
   });

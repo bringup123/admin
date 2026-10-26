@@ -120,6 +120,8 @@ export async function sendMessage(
     await messenger.setFields(contactId, {
       dafna_lead_id: itemId,
       dafna_first_name: name,
+      // The field Ayala's V3 automations read for «היי {{1}}» (2026-10-26).
+      V3_Name: name,
       // The card's address in monday, so a person reading the contact in
       // ManyChat reaches the card in one click (Ayala, 2026-10-26). MOID was
       // Bringi's field and held a bare item id; it holds the link from now on.
