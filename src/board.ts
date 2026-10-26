@@ -21,7 +21,8 @@ export const COL = {
 } as const;
 
 /** Sales status labels, exactly as they are on the board. V3 never creates a
- *  label: the column is full at 40, and a typo must fail, not add one. */
+ *  label: a typo must fail, not add one. «לבדיקת שגיא» is not on the board
+ *  since 2026-10-26; a write naming it drops the label and keeps the rest. */
 export const STATUS = {
   firstMessageSent: 'נשלחה הודעה ראשונה',
   meetingBooked: 'נקבעה פגישה',

@@ -31,17 +31,22 @@
 
 **View «נציגה»**, id **59740922**: name, phone, email, company, status, the eleven columns above, «מועד פעולה הבאה» `date_mkkgbp9t`, «לינק לפגישה» `link_mm0w28s`; newest first.
 
-### Sales status labels V3 uses
+### Sales status labels — rebuilt by Ayala on 2026-10-26
 
-| Sagi's word | Label on the board | id |
+The column was cut from 40 labels to 17 the morning of 2026-10-26. Read back the same day:
+
+| id | label | V3 |
 |---|---|---|
-| נשלחה הודעה ראשונה | «נשלחה הודעה ראשונה» | 152 |
-| בניסיונות תפיסה | «בניסיונות תפיסה» — **new 2026-10-25** | 155 |
-| לחזור במועד | «לחזור במועד» — **2026-10-25, on id 9**, a deactivated duplicate «תיאום פגישה» that carried 0 cards | 9 |
-| פגישה נקבעה / תואמה פגישה | «נקבעה פגישה» (existing; the dafna service writes it on a booking) | 15 |
-| לא רלוונטי | «לא רלוונטי לעולם» (existing) | 10 |
-| לבדיקת שגיא | «לבדיקת שגיא» (existing) | 106 |
-| פגישת דמו | «הצגת דמו» (existing) — pending Sagi | 104 |
+| 4 | חדש | a new Lead — welcomed (with an empty status, «יש ליצור קשר», «נשלחה הודעה ראשונה») |
+| 8 | נשלחה הודעה ראשונה | written after the welcome (re-added by Ayala) |
+| 2 | תיאום פגישה | |
+| 15 | נקבעה פגישה | written on a needs-mapping booking |
+| 156 | נקבעה פגישת דמו | written on a demo booking (was «פגישה 2 נקבעה») |
+| 1 · 3 · 6 · 10 · 102 | הצעת מחיר · אושר · הסתיים - לשמור על קשר · לא רלוונטי לעולם · פנייה חוזרת | |
+| 5 | (empty label) | was «חדש» |
+| 0 · 7 · 11 · 13 · 19 · 105 | deactivated | |
+
+**Gone:** «לבדיקת שגיא» (V3 writes it after the five-calls button and on a cancelled booking still marked booked — until it is re-added or replaced, V3 drops the label and writes the rest), «בניסיונות תפיסה», «לחזור במועד», «נורצ'ר», «הצגת דמו» and the dafna labels. **The dafna service writes its labels with `create_labels_if_missing`**, so while its intake runs it can put deleted labels back.
 
 ### Other columns worth knowing
 
@@ -100,6 +105,10 @@ The Make organisation reachable from the claude.ai connector («Haruv», eu1) is
 ## Vercel
 
 - Team `admin-23308494s-projects` (`team_6ME8IIFubWy8tTVbDFG66PS0`). V3's project **`bringup-v3`** (`prj_UTZMLTJGDEtKm9uzFKRhQKNpwBDY`), linked to `bringup123/admin`, Vercel Authentication off (the routes check their own tokens; monday and cal.com must reach them). **Production URL: https://bringup-v3.vercel.app** — production deploys from `claude/clever-goodall-bs7uzy`, the repo's only branch, until a `main` exists. On 2026-10-25 it built and answered 500 on `/health`, as it must with no `DATABASE_URL`. The dafna project is `prj_k3T4ljPOWzaZWZwO1WO6iubBYy14`.
+
+### What Ayala switched off on 2026-10-26 (read back from the API)
+
+Off: both other `create_item` webhooks (125529381, 153342135), the three-monthly nurture chain (131963099, 131964610, 131965763, 132435731), «שלח וואטסאפ | עסק קטן» (workflow 1717206992, webhook 153636640), «שליחת הודעת בדיקה ללקוח» (156164705), «נקבעה פגישה» (157508715), «שליחת הודעה» (170359380), and the dafna service's three (182858546 dial trigger, 183793658 closure, 184624299 campaign). **Still on:** the day-before reminder — workflow 1717270848 (date arrives on «תאריך פגישת אפיון» → «תזכורות» = «יום לפני פגישה») and its webhook 157656773 — waiting on Sagi's answer about reminders; and the internal ones (assign on creation, dates, the ads-board links, the webinar board, the campaign button's own workflow).
 
 ## cal.com
 
