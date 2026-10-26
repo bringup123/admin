@@ -101,6 +101,17 @@ export function buildApp(deps: AppDeps): Hono {
     return c.html(page('המערכת נעצרה', '<p>שום הודעה לא תישלח לאף ליד עד שהמתג יופעל מחדש במסך המתגים.</p>'));
   });
 
+  // What happened lately, for reading back without a database client: the
+  // last events, the welcome queue and the last webhook bodies. Admin token.
+  app.get('/api/recent', async (c) => {
+    if (!tokenOk(c.req.query('token'), env.adminToken)) return c.json({ error: 'forbidden' }, 403);
+    const events = await db.query('select id, type, monday_item_id, payload, created_at from events order by id desc limit 30');
+    const queue = await db.query('select * from welcome_queue order by created_at desc limit 20');
+    const inbox = await db.query('select id, source, payload, received_at from webhook_inbox order by id desc limit 10');
+    const messages = await db.query('select id, monday_item_id, kind, status, error, created_at, sent_at from messages order by id desc limit 20');
+    return c.json({ events: events.rows, queue: queue.rows, messages: messages.rows, inbox: inbox.rows });
+  });
+
   app.get('/switch', async (c) => {
     const t = c.req.query('token') ?? '';
     if (!tokenOk(t, env.adminToken)) return c.json({ error: 'forbidden' }, 403);
