@@ -21,8 +21,8 @@ export const COL = {
 } as const;
 
 /** Sales status labels, exactly as they are on the board. V3 never creates a
- *  label: a typo must fail, not add one. «לבדיקת שגיא» is not on the board
- *  since 2026-10-26; a write naming it drops the label and keeps the rest. */
+ *  label: a typo must fail, not add one. A label someone removes from the
+ *  board is dropped from the write and the rest kept (src/adapters/monday.ts). */
 export const STATUS = {
   firstMessageSent: 'נשלחה הודעה ראשונה',
   meetingBooked: 'נקבעה פגישה',

@@ -42,11 +42,12 @@ The column was cut from 40 labels to 17 the morning of 2026-10-26. Read back the
 | 2 | תיאום פגישה | |
 | 15 | נקבעה פגישה | written on a needs-mapping booking |
 | 156 | נקבעה פגישת דמו | written on a demo booking (was «פגישה 2 נקבעה») |
+| 9 | לבדיקת שגיא | written after the five-calls button, and on a cancelled booking still marked booked (re-added by Ayala) |
 | 1 · 3 · 6 · 10 · 102 | הצעת מחיר · אושר · הסתיים - לשמור על קשר · לא רלוונטי לעולם · פנייה חוזרת | |
 | 5 | (empty label) | was «חדש» |
 | 0 · 7 · 11 · 13 · 19 · 105 | deactivated | |
 
-**Gone:** «לבדיקת שגיא» (V3 writes it after the five-calls button and on a cancelled booking still marked booked — until it is re-added or replaced, V3 drops the label and writes the rest), «בניסיונות תפיסה», «לחזור במועד», «נורצ'ר», «הצגת דמו» and the dafna labels. **The dafna service writes its labels with `create_labels_if_missing`**, so while its intake runs it can put deleted labels back.
+**Gone:** «בניסיונות תפיסה», «לחזור במועד», «נורצ'ר», «הצגת דמו» and the dafna labels. **The dafna service writes its labels with `create_labels_if_missing`**, so while its intake runs it can put deleted labels back.
 
 ### Other columns worth knowing
 
