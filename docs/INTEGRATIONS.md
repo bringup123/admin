@@ -77,7 +77,7 @@ The ManyChat API reads tags and flows but **cannot switch an automation off**; t
 
 ### monday — the board's own automations and webhooks
 
-13 webhooks on 2026-10-25. The API does not return their URLs.
+13 webhooks on 2026-10-25, plus V3's two since 2026-10-26: **190950292** (`create_item` → the welcome) and **190950293** (`change_specific_column_value` on «טריגר נציגה» → the buttons), both to `https://bringup-v3.vercel.app/webhooks/monday?token=…`. The API does not return their URLs.
 
 | Webhook | Fires on | Owner |
 |---|---|---|

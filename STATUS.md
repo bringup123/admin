@@ -2,8 +2,8 @@
 
 > The source of truth for project state. Updated at the end of every working session (see AGENTS.md).
 
-- **Current stage:** the V3 service is written and tested (47 tests) and has a Vercel project; **it is not deployed yet** — its secrets have to be put into Vercel by a person. Nothing V3 does reaches a Lead.
-- **Last updated:** 2026-10-25, evening.
+- **Current stage:** **V3 is live and wired to monday, with every switch off.** https://bringup-v3.vercel.app/health answers `ok`, schema `v3` exists, the tick and the switch page answer. A new card is queued and, while `welcome` is off, skipped for good; a button press writes «the switch is off» on the card. Nothing reaches a Lead.
+- **Last updated:** 2026-10-26, morning.
 
 ## Done on 2026-10-25
 
@@ -16,7 +16,15 @@
 - **Vercel**: project `bringup-v3`, linked to this repo; its six non-secret variables set.
 - **An inventory of everything that messages a Lead** — `docs/INTEGRATIONS.md`.
 
-## Stopped here — the next step is a person's
+## 2026-10-26
+
+- **The secrets are in Vercel** (Ayala). They went in as «encrypted» for Production *and Preview*, not «sensitive»; a preview deployment would therefore reach the real board and database. There is only one branch, so no preview runs today — but before a second branch exists, either mark them Sensitive/Production-only or turn previews off.
+- **Redeployed; live.** `/health` → `{"ok":true,"appEnv":"production",…}` with every switch off.
+- **monday webhooks registered:** 190950292 (`create_item`), 190950293 («טריגר נציגה»). The script's `create_item` call is fixed — monday refuses any config on that event, even `{}`.
+- **The shared credentials were exposed** in plain text for a few minutes in Vercel and in the session transcript: the Supabase password, the monday token, the ManyChat token. Rotate them once V3 is proved (they are the dafna project's too).
+- **Ayala built the ManyChat automation on `v3_welcome`.** Whether its template is approved is not yet known.
+
+## Superseded — kept for the record
 
 **T-009, the deploy, waits on eight secrets in Vercel.** The session that wrote them may not hand credentials to the Vercel connector, so a person imports them: Vercel → `bringup-v3` → Settings → Environment Variables → import the session's `.env.vercel` (Production, Sensitive). Five of the eight were generated in that session and exist nowhere else — if the session is gone before they are imported, generate new ones (docs/SETUP.md). Then a redeploy (variables apply to new deployments only), `https://bringup-v3.vercel.app/health`, and the wiring (`docs/SETUP.md`, «Wiring»).
 

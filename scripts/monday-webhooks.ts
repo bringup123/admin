@@ -59,9 +59,13 @@ if (remove) {
       console.log(`would register ${w.event} ${JSON.stringify(w.config)} (${w.what}) → ${base}/webhooks/monday?token=…`);
       continue;
     }
+    // `create_item` refuses any config, even an empty one.
+    const withConfig = Object.keys(w.config).length > 0;
     const made = await gql<{ create_webhook: { id: string } }>(
-      `mutation ($b: ID!, $u: String!, $c: JSON) { create_webhook(board_id: $b, url: $u, event: ${w.event}, config: $c) { id } }`,
-      { b: board, u: url, c: JSON.stringify(w.config) }
+      withConfig
+        ? `mutation ($b: ID!, $u: String!, $c: JSON) { create_webhook(board_id: $b, url: $u, event: ${w.event}, config: $c) { id } }`
+        : `mutation ($b: ID!, $u: String!) { create_webhook(board_id: $b, url: $u, event: ${w.event}) { id } }`,
+      withConfig ? { b: board, u: url, c: JSON.stringify(w.config) } : { b: board, u: url }
     );
     console.log(`registered ${w.event} (${w.what}): webhook ${made.create_webhook.id}`);
   }
