@@ -1,5 +1,5 @@
 import { STATUS, WELCOME_OVERWRITES, WELCOME_STATUSES } from '../board.js';
-import type { CrmPort } from '../ports.js';
+import type { Card, CrmPort } from '../ports.js';
 import { cardBookingUrl } from './links.js';
 import { normalizePhone } from './phone.js';
 import { REFUSAL_HE, sendMessage, type SendDeps } from './send.js';
@@ -92,20 +92,18 @@ export async function runWelcomeQueue(deps: WelcomeDeps, limit = 20): Promise<Ou
         await settle('skipped', result.reason);
         continue;
       }
-      const env = deps.env;
-      const lead = { itemId, name: card.name, email: card.email };
-      await crm.updateCard(itemId, {
-        // A status a person (or a booking) set is theirs.
-        ...(WELCOME_OVERWRITES.includes(card.status) ? { status: STATUS.firstMessageSent } : {}),
-        // The card's own links, so a meeting booked from the card lands on it.
-        ...(!card.meetingLink && env.bookingUrl
-          ? { meetingLink: { url: cardBookingUrl(env.bookingUrl, env, lead), text: BOOKING_LINK_TEXT } }
-          : {}),
-        ...(!card.demoLink && env.demoBookingUrl
-          ? { demoLink: { url: cardBookingUrl(env.demoBookingUrl, env, lead), text: DEMO_LINK_TEXT } }
-          : {}),
-      });
-      await crm.postUpdate(itemId, 'נשלחה הודעת ברוכים הבאים בוואטסאפ.');
+      // Sent. Whatever happens on the board now, the card is done: putting it
+      // back on the queue would only meet «already sent» (found live,
+      // 2026-10-26, when the status label had been removed from the board).
+      try {
+        await afterWelcome(deps, card);
+      } catch (err) {
+        await db.query('insert into events (type, monday_item_id, payload) values ($1, $2, $3)', [
+          'welcome_board_write_failed',
+          itemId,
+          JSON.stringify({ error: err instanceof Error ? err.message.slice(0, 500) : String(err) }),
+        ]);
+      }
       await settle('done', 'sent');
     } catch (err) {
       // A board or network failure: back on the queue, tried again later.
@@ -122,4 +120,31 @@ export async function runWelcomeQueue(deps: WelcomeDeps, limit = 20): Promise<Ou
     }
   }
   return out;
+}
+
+/** The card after its welcome: the status moves, if it still says «new», and
+ *  the card's own booking links go into empty cells. */
+async function afterWelcome(deps: WelcomeDeps, card: Card): Promise<void> {
+  const { crm, env, db } = deps;
+  const itemId = card.id;
+  const lead = { itemId, name: card.name, email: card.email };
+  const written = await crm.updateCard(itemId, {
+    // A status a person (or a booking) set is theirs.
+    ...(WELCOME_OVERWRITES.includes(card.status) ? { status: STATUS.firstMessageSent } : {}),
+    // The card's own links, so a meeting booked from the card lands on it.
+    ...(!card.meetingLink && env.bookingUrl
+      ? { meetingLink: { url: cardBookingUrl(env.bookingUrl, env, lead), text: BOOKING_LINK_TEXT } }
+      : {}),
+    ...(!card.demoLink && env.demoBookingUrl
+      ? { demoLink: { url: cardBookingUrl(env.demoBookingUrl, env, lead), text: DEMO_LINK_TEXT } }
+      : {}),
+  });
+  if (written.refusedLabels?.length) {
+    await db.query('insert into events (type, monday_item_id, payload) values ($1, $2, $3)', [
+      'label_missing',
+      itemId,
+      JSON.stringify({ labels: written.refusedLabels }),
+    ]);
+  }
+  await crm.postUpdate(itemId, 'נשלחה הודעת ברוכים הבאים בוואטסאפ.');
 }

@@ -25,7 +25,8 @@ export const COL = {
 export const STATUS = {
   firstMessageSent: 'נשלחה הודעה ראשונה',
   meetingBooked: 'נקבעה פגישה',
-  demoBooked: 'הצגת דמו',
+  /** Renamed on the board by Ayala, 2026-10-26 (it was «פגישה 2 נקבעה», id 156). */
+  demoBooked: 'נקבעה פגישת דמו',
   sagiCheck: 'לבדיקת שגיא',
 } as const;
 

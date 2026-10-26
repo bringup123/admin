@@ -19,6 +19,23 @@ describe('the welcome message', () => {
     expect(c.demoLink).toContain('dafna_lead=10');
   });
 
+  it('a status label gone from the board costs the status only: the links are written and the card is not sent twice', async () => {
+    const h = await harness();
+    await h.on('interactions_enabled', 'welcome');
+    h.crm.missingLabels.add('נשלחה הודעה ראשונה');
+    h.crm.add(card({ id: '18' }));
+    await enqueueWelcome(h.deps, '18');
+    h.clock.advance(FIRST_DELAY_MS);
+    expect(await runWelcomeQueue(h.deps)).toEqual([{ itemId: '18', outcome: 'sent' }]);
+    const c = h.crm.cards.get('18')!;
+    expect(c.status).toBe('חדש');
+    expect(c.meetingLink).toContain('dafna_lead=18');
+    h.clock.advance(RETRY_MS * 3);
+    expect(await runWelcomeQueue(h.deps)).toEqual([]);
+    const ev = await h.db.query<{ type: string }>("select type from events where type = 'label_missing'");
+    expect(ev.rows).toHaveLength(1);
+  });
+
   it('queues a card once however many times monday says it was created', async () => {
     const h = await harness();
     expect(await enqueueWelcome(h.deps, '10')).toBe(true);

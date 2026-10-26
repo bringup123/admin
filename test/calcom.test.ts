@@ -34,7 +34,7 @@ describe('cal.com bookings', () => {
     expect(w.demoDate).toBeUndefined();
   });
 
-  it('a demo booking writes the demo columns and «הצגת דמו», and leaves the needs-mapping ones alone', async () => {
+  it('a demo booking writes the demo columns and «נקבעה פגישת דמו», and leaves the needs-mapping ones alone', async () => {
     const h = await harness();
     h.crm.add(card({ id: '30', status: 'נקבעה פגישה' }));
     expect(await handleCalcomWebhook(h.deps, booking({ uid: 'd1', eventTypeId: DEMO }))).toEqual({
@@ -43,7 +43,7 @@ describe('cal.com bookings', () => {
       meeting: 'demo',
     });
     const w = h.crm.lastWrite('30')!;
-    expect(w.status).toBe('הצגת דמו');
+    expect(w.status).toBe('נקבעה פגישת דמו');
     expect(w.demoDate).toBe('2026-10-28T09:00:00.000Z');
     expect(w.demoLink).toEqual({ url: 'https://meet.google.com/abc', text: 'דמו' });
     expect(w.meetingDate).toBeUndefined();

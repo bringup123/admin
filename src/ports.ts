@@ -28,7 +28,10 @@ export interface CardWrite {
 
 export interface CrmPort {
   getCard(itemId: string): Promise<Card | null>;
-  updateCard(itemId: string, write: CardWrite): Promise<void>;
+  /** Writes what it can. A status label the board no longer has is dropped,
+   *  the rest written, and the dropped labels returned — the board's labels
+   *  are a person's to change, and a renamed label must not lose a date. */
+  updateCard(itemId: string, write: CardWrite): Promise<{ refusedLabels?: string[] }>;
   findCardByEmail(email: string): Promise<string | null>;
   /** An update on the card, so a person reads what happened. */
   postUpdate(itemId: string, text: string): Promise<void>;

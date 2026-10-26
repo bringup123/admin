@@ -43,14 +43,23 @@ export class FakeCrm implements CrmPort {
     const c = this.cards.get(itemId);
     return c ? { ...c } : null;
   }
-  async updateCard(itemId: string, write: CardWrite) {
+  /** Labels the fake board does not have; a write naming one is refused for them. */
+  missingLabels = new Set<string>();
+  async updateCard(itemId: string, input: CardWrite) {
+    const write = { ...input };
+    const refusedLabels = [write.status, write.closeReason].filter((x): x is string => !!x && this.missingLabels.has(x));
+    if (refusedLabels.length) {
+      delete write.status;
+      delete write.closeReason;
+    }
     this.writes.push({ itemId, write });
     const c = this.cards.get(itemId);
-    if (!c) return;
+    if (!c) return refusedLabels.length ? { refusedLabels } : {};
     if (write.status !== undefined) c.status = write.status;
     if (write.trigger === null) c.trigger = '';
     if (write.meetingLink !== undefined) c.meetingLink = write.meetingLink?.url ?? '';
     if (write.demoLink !== undefined) c.demoLink = write.demoLink?.url ?? '';
+    return refusedLabels.length ? { refusedLabels } : {};
   }
   async findCardByEmail(email: string) {
     for (const c of this.cards.values()) if (c.email.toLowerCase() === email.toLowerCase()) return c.id;

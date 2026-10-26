@@ -95,15 +95,29 @@ export function mondayCrm(cfg: { token: string; boardId: string }): CrmPort {
       if (w.meetingChangeLink !== undefined) values[COL.meetingChangeLink] = w.meetingChangeLink ?? '';
       if (w.demoDate !== undefined) values[COL.demoDate] = w.demoDate ? dateCell(w.demoDate) : '';
       if (w.demoLink !== undefined) values[COL.demoLink] = w.demoLink ?? '';
-      if (Object.keys(values).length === 0) return;
-      // create_labels_if_missing: false, deliberately. The status column is
-      // full, and a mistyped label must fail loudly rather than become one.
-      await gql(
-        `mutation ($board: ID!, $item: ID!, $values: JSON!) {
-           change_multiple_column_values(board_id: $board, item_id: $item, column_values: $values, create_labels_if_missing: false) { id }
-         }`,
-        { board: cfg.boardId, item: itemId, values: JSON.stringify(values) }
-      );
+      if (Object.keys(values).length === 0) return {};
+      // create_labels_if_missing: false, deliberately: a label that is not on
+      // the board must not become one. monday refuses the whole write then,
+      // so the label columns are dropped and the rest written again.
+      const write = (v: Record<string, unknown>) =>
+        gql(
+          `mutation ($board: ID!, $item: ID!, $values: JSON!) {
+             change_multiple_column_values(board_id: $board, item_id: $item, column_values: $values, create_labels_if_missing: false) { id }
+           }`,
+          { board: cfg.boardId, item: itemId, values: JSON.stringify(v) }
+        );
+      try {
+        await write(values);
+        return {};
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        if (!/label doesn'?t exist/i.test(message)) throw err;
+        const refusedLabels = [w.status, w.closeReason].filter((x): x is string => !!x);
+        delete values[COL.status];
+        delete values[COL.closeReason];
+        if (Object.keys(values).length > 0) await write(values);
+        return { refusedLabels };
+      }
     },
 
     async findCardByEmail(email) {
