@@ -81,12 +81,17 @@ AI לעסקים, מאיפה מתחילים: https://bringup.io/technological-sol
 <p>שם התבנית: <span class="ltr">v3_reminder_day</span> · שפה: עברית · קטגוריה: <b>Utility</b> (תזכורת לפגישה שהליד קבע)</p>
 <pre>היי {{1}}, תזכורת לפגישה שלך עם שגיא מ-BringUp:
 {{2}}
-אם צריך לשנות מועד, אפשר בכפתור כאן למטה.</pre>
+אפשר לאשר הגעה או לשנות מועד בכפתורים כאן למטה.</pre>
 <p>משתנים: <span class="ltr">{{1}}</span> ← <span class="ltr">V3_Name</span> · <span class="ltr">{{2}}</span> ← <span class="ltr">V3_Meeting_When</span> (למשל «יום רביעי, 28.10 בשעה 11:00» — היום, התאריך והשעה בשדה אחד, ולכן הנוסח לא אומר «מחר»).</p>
 <p>אם רוצים שהתזכורת תגיד איזו פגישה: השדה <span class="ltr">V3_Meeting_Type</span> מחזיק «פגישת מיפוי הצרכים» או «פגישת הדמו».</p>
-<p>כפתור: Visit website · טקסט: <b>שינוי או ביטול</b> · כתובת, עם <span class="ltr">{{1}}</span> בסוף:</p>
+<p><b>שני כפתורים</b> (Ayala, 2026-10-26), בסדר הזה:</p>
+<ol>
+<li><b>מאשר/ת הגעה</b> — Quick reply. הלחיצה מפעילה ב-ManyChat תשובה קצרה בתוך השיחה (לא תבנית — אחרי לחיצה חלון 24 השעות פתוח). הנוסח של התשובה — של שגיא.</li>
+<li><b>שינוי מועד</b> — Visit website, כתובת עם <span class="ltr">{{1}}</span> בסוף:
 <pre class="ltr">https://cal.com/booking/{{1}}</pre>
-<p>המשתנה של הכפתור ← <span class="ltr">V3_Booking_Uid</span>. דוגמה ל-Meta: <span class="ltr">iHqF6248odNdeq4kyeKLEY</span></p>
+המשתנה ← <span class="ltr">V3_Booking_Uid</span>. דוגמה ל-Meta: <span class="ltr">iHqF6248odNdeq4kyeKLEY</span>. בדף הזה הליד יכול גם לבטל.</li>
+</ol>
+<p>בגוף ההודעה, השורה האחרונה: «אפשר לאשר הגעה או לשנות מועד בכפתורים כאן למטה.»</p>
 <p><b>האוטומציה:</b> טריגר «Tag applied» = <span class="ltr">v3_reminder_day</span> ← תבנית <span class="ltr">v3_reminder_day</span>. שם: «V3: תזכורת יום לפני».</p>
 </div>
 
