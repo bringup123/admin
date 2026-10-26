@@ -63,7 +63,11 @@ describe('sendMessage guards', () => {
     expect(await send(h)).toEqual({ sent: true, phone: ALLOWED });
     expect(await send(h)).toEqual({ sent: false, reason: 'already_sent' });
     expect(h.messenger.tags).toEqual([{ contactId: 'c1', tag: 'v3_welcome' }]);
-    expect(h.messenger.fields[0]?.fields).toEqual({ dafna_lead_id: '1', dafna_first_name: 'דנה' });
+    expect(h.messenger.fields[0]?.fields).toEqual({
+      dafna_lead_id: '1',
+      dafna_first_name: 'דנה',
+      MOID: 'https://bringup-io.monday.com/boards/1753447162/views/23542451/pulses/1',
+    });
   });
 
   it('a channel failure spends nothing: the next attempt sends', async () => {

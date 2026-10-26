@@ -120,7 +120,7 @@ Off: both other `create_item` webhooks (125529381, 153342135), the three-monthly
 ## ManyChat and Meta
 
 - **V3's tags** (created 2026-10-25 over the API): `v3_welcome` **99906572**, `v3_no_answer_3` **99906573**, `v3_no_answer_5` **99906574**. No automation behind them yet — `docs/manychat-build-sheet.html`. Adding one to a contact sends nothing until its automation exists.
-- **Fields V3 writes:** `dafna_first_name` **14918920**, `dafna_lead_id` **14899233** (both the dafna project's; reused).
+- **Fields V3 writes on every send:** `dafna_first_name` **14918920**, `dafna_lead_id` **14899233** (both the dafna project's; reused), and **`MOID` 14291950** — the card's link, `https://bringup-io.monday.com/boards/1753447162/views/23542451/pulses/<item id>` (Ayala, 2026-10-26). MOID was Bringi's and held a bare item id; anything of Bringi's still reading it as an id would now get a link.
 
 - Account «BringUp», Pro. API base `https://api.manychat.com`, token `MANYCHAT_API_TOKEN`.
 - Sending a template = set the contact's fields, add a tag; a ManyChat automation on that tag sends the Meta-approved template. A URL button can carry a variable tail; Meta only ever sees the ASCII base.

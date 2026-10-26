@@ -33,6 +33,11 @@ export interface SendDeps {
   clock: Clock;
 }
 
+/** The card on the CRM, as monday links it. */
+export function cardUrl(itemId: string): string {
+  return `https://bringup-io.monday.com/boards/1753447162/views/23542451/pulses/${itemId}`;
+}
+
 /** The first word of the card's title, which is the Lead's full name. A title
  *  with a digit in it, or none at all, is not a name to greet anyone by. */
 export function firstName(cardName: string): string {
@@ -112,7 +117,14 @@ export async function sendMessage(
     if (!contactId) contactId = await messenger.createContact({ phoneE164: phone, itemId, firstName: name });
     // This contact is being messaged about THIS card — the booking button's
     // tail and the hidden question read it.
-    await messenger.setFields(contactId, { dafna_lead_id: itemId, dafna_first_name: name });
+    await messenger.setFields(contactId, {
+      dafna_lead_id: itemId,
+      dafna_first_name: name,
+      // The card's address in monday, so a person reading the contact in
+      // ManyChat reaches the card in one click (Ayala, 2026-10-26). MOID was
+      // Bringi's field and held a bare item id; it holds the link from now on.
+      MOID: cardUrl(itemId),
+    });
     await messenger.applyTag(contactId, TAGS[kind]);
   } catch (err) {
     // A failure spends nothing: the row goes, so the next attempt can send.

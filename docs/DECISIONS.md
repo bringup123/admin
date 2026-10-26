@@ -4,6 +4,14 @@ Every material architectural or product decision is recorded here **the moment i
 
 ---
 
+## 2026-10-26 — ManyChat's MOID holds the card's link
+
+- **Decision:** every send writes the card's monday URL into the contact's `MOID` field. (Ayala.)
+- **Why:** a person reading a contact in ManyChat reaches its card in one click.
+- **What it overrides:** the dafna project kept out of `MOID` because it was Bringi's, and Bringi wrote a bare item id there. Bringi's flows are being switched off; any that still read `MOID` as an id will see a link.
+
+---
+
 ## 2026-10-25 — V3 is a service in this repo, and cal.com's webhook moves here
 
 - **Decision:** V3's messages and bookings are handled by a small service here (option 1 of the three), and the cal.com webhook is copied from the dafna service into it. (Ayala, «תעתיק את הוובהוק של קל קום לאדמין».)
