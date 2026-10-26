@@ -34,8 +34,8 @@ table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--li
 <h2>כתובת הכפתור — זהה בשלוש התבניות</h2>
 <div class="card">
 <p>סוג: כפתור URL, <b>דינמי</b>. טקסט הכפתור: <b>לתיאום ביומן של שגיא</b></p>
-<p>ב-ManyChat: Call to action → Visit website → <b>Dynamic</b>. כתובת בסיס — להעתיק כמו שהיא, כולל הסוף <span class="ltr">?dafna_lead=</span>, <b>בלי</b> להקליד <span class="ltr">{{1}}</span> (ManyChat מוסיף את המשתנה בעצמו):</p>
-<pre class="ltr">https://cal.com/sagi-goldberger-xnuzdu/%D7%9E%D7%99%D7%A4%D7%95%D7%99-%D7%A6%D7%A8%D7%9B%D7%99%D7%9D-%D7%9E%D7%A2%D7%A8%D7%9B%D7%AA-%D7%9C%D7%A2%D7%A1%D7%A7?dafna_lead=</pre>
+<p>ב-ManyChat: Call to action → Visit website. אין מתג «דינמי» — הכפתור נעשה דינמי כש<b>מקלידים <span class="ltr">{{1}}</span> בסוף הכתובת</b>. להעתיק כמו שהיא, כולל הסוף <span class="ltr">?dafna_lead={{1}}</span> (תוקן 2026-10-26: הגרסה הקודמת אמרה לא להקליד אותו, והכפתור יצא סטטי):</p>
+<pre class="ltr">https://cal.com/sagi-goldberger-xnuzdu/%D7%9E%D7%99%D7%A4%D7%95%D7%99-%D7%A6%D7%A8%D7%9B%D7%99%D7%9D-%D7%9E%D7%A2%D7%A8%D7%9B%D7%AA-%D7%9C%D7%A2%D7%A1%D7%A7?dafna_lead={{1}}</pre>
 <p>דוגמה ל-Meta עבור <span class="ltr">{{1}}</span>: <span class="ltr">3203379334</span></p>
 <p>איפה: ManyChat → Message Templates → New Template. את המשתנה בגוף ההודעה מוסיפים בכפתור המשתנים ובוחרים מהרשימה — לא מקלידים את השם.</p>
 <p class="note">למה כך: Meta מקודד את החלק המשתנה, ולכן ה-<span class="ltr">?</span> חייב להיות בבסיס והמשתנה הוא רק ספרות (נבדק בפרויקט דפנה, 3.9). זה בדיוק המבנה של תבניות ה-<span class="ltr">_id</span> של דפנה שאושרו.</p>
