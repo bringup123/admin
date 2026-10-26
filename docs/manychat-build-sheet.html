@@ -34,8 +34,8 @@ table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--li
 <h2>כתובת הכפתור — זהה בשלוש התבניות</h2>
 <div class="card">
 <p>סוג: כפתור URL, <b>דינמי</b>. טקסט הכפתור: <b>לתיאום ביומן של שגיא</b></p>
-<p>ב-ManyChat: Call to action → Visit website. אין מתג «דינמי» — הכפתור נעשה דינמי כש<b>מקלידים <span class="ltr">{{1}}</span> בסוף הכתובת</b>. להעתיק כמו שהיא, כולל הסוף <span class="ltr">?dafna_lead={{1}}</span> (תוקן 2026-10-26: הגרסה הקודמת אמרה לא להקליד אותו, והכפתור יצא סטטי):</p>
-<pre class="ltr">https://cal.com/sagi-goldberger-xnuzdu/%D7%9E%D7%99%D7%A4%D7%95%D7%99-%D7%A6%D7%A8%D7%9B%D7%99%D7%9D-%D7%9E%D7%A2%D7%A8%D7%9B%D7%AA-%D7%9C%D7%A2%D7%A1%D7%A7?dafna_lead={{1}}</pre>
+<p>ב-ManyChat, בעריכת התבנית, לכפתור URL יש שלושה שדות: Button Text, Button URL, ו-<b>Variable (Optional)</b>. ב-Button URL — הכתובת כמו שהיא, נגמרת ב-<span class="ltr">?dafna_lead=</span>, <b>בלי</b> <span class="ltr">{{1}}</span> ובלי שם שדה. ב-Variable — בוחרים מהרשימה את <span class="ltr">dafna_lead_id</span>; ManyChat מוסיף את ערכו לסוף הכתובת. (נבדק עם אילה 2026-10-26. כפתור שה-Variable שלו ריק — סטטי, והפגישה לא מגיעה לכרטיס.)</p>
+<pre class="ltr">https://cal.com/sagi-goldberger-xnuzdu/%D7%9E%D7%99%D7%A4%D7%95%D7%99-%D7%A6%D7%A8%D7%9B%D7%99%D7%9D-%D7%9E%D7%A2%D7%A8%D7%9B%D7%AA-%D7%9C%D7%A2%D7%A1%D7%A7?dafna_lead=</pre>
 <p>דוגמה ל-Meta עבור <span class="ltr">{{1}}</span>: <span class="ltr">3203379334</span></p>
 <p>איפה: ManyChat → Message Templates → New Template. את המשתנה בגוף ההודעה מוסיפים בכפתור המשתנים ובוחרים מהרשימה — לא מקלידים את השם.</p>
 <p class="note">למה כך: Meta מקודד את החלק המשתנה, ולכן ה-<span class="ltr">?</span> חייב להיות בבסיס והמשתנה הוא רק ספרות (נבדק בפרויקט דפנה, 3.9). זה בדיוק המבנה של תבניות ה-<span class="ltr">_id</span> של דפנה שאושרו.</p>
@@ -52,7 +52,7 @@ table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--li
 <p><b>שני כפתורים</b> (Call to action → Visit website), בסדר הזה — הכתובת הארוכה של הכתבה יוצאת מהטקסט ונכנסת לכפתור:</p>
 <ol>
 <li>טקסט: <b>לכתבה בדה-מרקר</b> · סוג: <b>Static</b> · כתובת:<pre class="ltr">https://www.themarker.com/labels/automation/2026-01-12/ty-article-labels/0000019b-b1c5-d612-ad9f-b7d7807c0000</pre></li>
-<li>טקסט: <b>לתיאום ביומן של שגיא</b> · כתובת: כמו למעלה, עם <span class="ltr">{{1}}</span> בסוף.</li>
+<li>טקסט: <b>לתיאום ביומן של שגיא</b> · כתובת: כמו למעלה; Variable: <span class="ltr">dafna_lead_id</span>.</li>
 </ol>
 <p><b>האוטומציה:</b> טריגר «Tag applied» = <span class="ltr">v3_welcome</span> ← שליחת תבנית <span class="ltr">v3_welcome</span>; גוף <span class="ltr">{{1}}</span> ← <span class="ltr">dafna_first_name</span>; כפתור <span class="ltr">{{1}}</span> ← <span class="ltr">dafna_lead_id</span>. שם: «V3: ברוכים הבאים».</p>
 </div>
@@ -84,14 +84,12 @@ AI לעסקים, מאיפה מתחילים: https://bringup.io/technological-sol
 אפשר לאשר הגעה או לשנות מועד בכפתורים כאן למטה.</pre>
 <p>משתנים: <span class="ltr">{{1}}</span> ← <span class="ltr">V3_Name</span> · <span class="ltr">{{2}}</span> ← <span class="ltr">V3_Meeting_When</span> (למשל «יום רביעי, 28.10 בשעה 11:00» — היום, התאריך והשעה בשדה אחד, ולכן הנוסח לא אומר «מחר»).</p>
 <p>אם רוצים שהתזכורת תגיד איזו פגישה: השדה <span class="ltr">V3_Meeting_Type</span> מחזיק «פגישת מיפוי הצרכים» או «פגישת הדמו».</p>
-<p><b>שני כפתורים</b> (Ayala, 2026-10-26), בסדר הזה:</p>
+<p><b>שני כפתורים, שניהם Quick reply</b> — ManyChat לא מערבב כפתור URL עם כפתורים רגילים בתבנית אחת («up to three regular buttons or one URL button»):</p>
 <ol>
-<li><b>מאשר/ת הגעה</b> — Quick reply. הלחיצה מפעילה ב-ManyChat תשובה קצרה בתוך השיחה (לא תבנית — אחרי לחיצה חלון 24 השעות פתוח). הנוסח של התשובה — של שגיא.</li>
-<li><b>שינוי מועד</b> — Visit website, כתובת עם <span class="ltr">{{1}}</span> בסוף:
-<pre class="ltr">https://cal.com/booking/{{1}}</pre>
-המשתנה ← <span class="ltr">V3_Booking_Uid</span>. דוגמה ל-Meta: <span class="ltr">iHqF6248odNdeq4kyeKLEY</span>. בדף הזה הליד יכול גם לבטל.</li>
+<li><b>מאשר/ת הגעה</b> — ManyChat עונה בהודעה קצרה בתוך השיחה (אחרי לחיצה חלון 24 השעות פתוח, אין צורך בתבנית).</li>
+<li><b>שינוי מועד</b> — ManyChat עונה בהודעה בתוך השיחה ובה הלינק: <span class="ltr">https://cal.com/booking/</span> ואחריו השדה <span class="ltr">V3_Booking_Uid</span>. בדף הזה הליד משנה מועד או מבטל, והכרטיס מתעדכן מעצמו.</li>
 </ol>
-<p>בגוף ההודעה, השורה האחרונה: «אפשר לאשר הגעה או לשנות מועד בכפתורים כאן למטה.»</p>
+<p>הנוסח של שתי התשובות — של שגיא.</p>
 <p><b>האוטומציה:</b> טריגר «Tag applied» = <span class="ltr">v3_reminder_day</span> ← תבנית <span class="ltr">v3_reminder_day</span>. שם: «V3: תזכורת יום לפני».</p>
 </div>
 
@@ -102,9 +100,9 @@ AI לעסקים, מאיפה מתחילים: https://bringup.io/technological-sol
 <pre>היי {{1}}, הפגישה שלך עם שגיא מ-BringUp מתחילה בעוד שעה.
 להצטרפות לפגישה — בכפתור כאן למטה.</pre>
 <p>משתנים: <span class="ltr">{{1}}</span> ← <span class="ltr">V3_Name</span>.</p>
-<p>כפתור: Visit website · טקסט: <b>הצטרפות לפגישה</b> · כתובת, עם <span class="ltr">{{1}}</span> בסוף:</p>
-<pre class="ltr">https://meet.google.com/{{1}}</pre>
-<p>המשתנה של הכפתור ← <span class="ltr">V3_Meet_Code</span> (רק הקוד, למשל <span class="ltr">abc-defg-hij</span> — לא הכתובת המלאה). דוגמה ל-Meta: <span class="ltr">dny-ntue-ejq</span></p>
+<p>כפתור: Visit website · טקסט: <b>הצטרפות לפגישה</b> · Button URL:</p>
+<pre class="ltr">https://meet.google.com/</pre>
+<p>Variable ← <span class="ltr">V3_Meet_Code</span> (רק הקוד, למשל <span class="ltr">abc-defg-hij</span> — לא הכתובת המלאה). דוגמה ל-Meta: <span class="ltr">dny-ntue-ejq</span></p>
 <p><b>האוטומציה:</b> טריגר «Tag applied» = <span class="ltr">v3_reminder_hour</span> ← תבנית <span class="ltr">v3_reminder_hour</span>. שם: «V3: תזכורת שעה לפני».</p>
 </div>
 
