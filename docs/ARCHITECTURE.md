@@ -36,17 +36,26 @@ cal.com webhook, **one per event type** (not user-level) → `POST /webhooks/cal
 
 | | needs-mapping | demo |
 |---|---|---|
-| created | status «נקבעה פגישה», «תאריך פגישת אפיון», meeting link in «לינק לפגישה», change link | status «הצגת דמו», «תאריך פגישת דמו», meeting link in «לינק לפגישת דמו» |
+| created | status «נקבעה פגישה», «תאריך פגישת אפיון», meeting link in «לינק לפגישה», change link | status «נקבעה פגישת דמו», «תאריך פגישת דמו», meeting link in «לינק לפגישת דמו» |
 | rescheduled | the date and links | the date and link |
-| cancelled | date and links cleared, the booking link back in its cell, status «לבדיקת שגיא» **if still «נקבעה פגישה»** | the same for the demo columns, if still «הצגת דמו» |
+| cancelled | date and links cleared, the booking link back in its cell, status «לבדיקת שגיא» **if still «נקבעה פגישה»** | the same for the demo columns, if still «נקבעה פגישת דמו» |
 
-A booking finds its card by the hidden question `dafna_lead` (the card id, carried by every link V3 writes or sends), then by the attendee's email. Unmatched bookings are logged. **No WhatsApp is sent on a booking** until Sagi answers whether meeting confirmations and reminders stay (cal.com's own email invitation goes regardless).
+A booking finds its card by the hidden question `dafna_lead` (the card id, carried by every link V3 writes or sends), then by the attendee's email. Unmatched bookings are logged. No WhatsApp is sent at the moment of booking (cal.com's own email invitation goes regardless).
+
+### Meeting reminders (`src/domain/reminders.ts`, 2026-10-26)
+
+Two WhatsApps before every needs-mapping and demo meeting — **a day before** and **an hour before**, the second with a button into the Google Meet room. Nothing is scheduled ahead: every tick reads `v3.bookings` for meetings in the next 25 hours, so a cancelled booking is simply not there and a moved one carries its new time. `v3.reminders` is the claim, one row per booking, reminder and meeting time, written before anything is sent.
+
+- **Due:** an hour before; a day before, **moved to Saturday 21:00 when it falls between Friday 15:00 and Saturday 21:00** (Ayala: «במוצאי שבת»). Jewish holidays are not known.
+- **Not sent:** a meeting booked after the reminder's moment (`booked_late` — booked this morning for this afternoon gets the hour-before only); a tick that comes too late (a day-before within 2 hours of the meeting, an hour-before within 10 minutes); a card whose status is no longer «נקבעה פגישה» or «נקבעה פגישת דמו» (a person moved it on); an hour-before with no Meet link (a note on the card).
+- **Like the welcome,** a reminder its switch held back is settled, not sent later; a ManyChat failure is tried again next tick.
+- **The send:** the usual guards and contact; the fields `V3_Meeting_Type`, `V3_Meeting_When`, `V3_Meet_Code`, `V3_Booking_Uid`; then the tag `v3_reminder_day` / `v3_reminder_hour`. A note on the card says it went.
 
 ## Safety rails
 
 - **Kill switch** — `v3.control.interactions_enabled`, **off at first boot**. The bookmark `GET /kill?token=…` stops everything that reaches a Lead; the switch page `/switch?token=…` shows and sets every switch.
-- **One switch per message** — `welcome`, `no_answer_3`, `no_answer_5`, all off by default, on the switch page.
+- **One switch per message** — `welcome`, `no_answer_3`, `no_answer_5`, `reminder_day`, `reminder_hour`, all off by default, on the switch page.
 - **The cage** — `allowlist_only`, on by default **even in production**: only `PHONE_ALLOWLIST` numbers are messaged until it is opened. Outside production the allowlist always applies, whatever the switch says.
 - **Daily cap** — `MAX_MESSAGES_PER_DAY`; a bug hits a wall.
-- **Once only** — every message has a dedupe key (`welcome:<item>`, `no_answer_3:<item>`, `no_answer_5:<item>`); a second attempt sends nothing.
+- **Once only** — every message has a dedupe key (`welcome:<item>`, `no_answer_3:<item>`, `no_answer_5:<item>`; a reminder `reminder_day:<booking uid>:<start>`, so a moved meeting is reminded again); a second attempt sends nothing.
 - **Never renames or creates a board label.** Status writes name an existing label; a label that is not there is an error, not a new label (the status column is full at 40).

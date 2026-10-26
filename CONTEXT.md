@@ -21,6 +21,8 @@ _Avoid_: nurture, follow-up sequence — there is no sequence; each is one press
 
 **Demo meeting** (פגישת דמו): a later meeting on its own cal.com event type, booked through the card's demo link.
 
+**Meeting reminder** (תזכורת לפגישה): one of two WhatsApps before a booked meeting, needs-mapping or demo — a day before (Saturday night instead of Shabbat) and an hour before, the second with the way into the room. Not sent for a meeting that was cancelled, booked too close to its time, or whose card a person has moved on.
+
 **Booking link**: a cal.com link that names the Lead's card, so the meeting lands on the right row. A meeting booked without it is one the system cannot place.
 
 **Business line** (הקו העסקי): BringUp's WhatsApp number, sent through ManyChat — the same number the earlier flows used, so its quality rating is shared with every message ever sent from it.

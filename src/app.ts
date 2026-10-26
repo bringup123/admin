@@ -7,6 +7,7 @@ import type { Clock, CrmPort, MessengerPort } from './ports.js';
 import { handleTrigger } from './domain/buttons.js';
 import { handleCalcomWebhook } from './domain/calcom.js';
 import { isSwitchKey, readSwitches, setSwitch, SWITCHES, type SwitchKey } from './domain/switches.js';
+import { runReminders } from './domain/reminders.js';
 import { enqueueWelcome, runWelcomeQueue } from './domain/welcome.js';
 
 export interface AppDeps {
@@ -86,7 +87,7 @@ export function buildApp(deps: AppDeps): Hono {
   const tick = async (c: Context) => {
     const auth = (c.req.header('authorization') ?? '').replace(/^Bearer /, '');
     if (!tokenOk(auth, env.cronSecret)) return c.json({ error: 'forbidden' }, 403);
-    return c.json({ welcome: await runWelcomeQueue(deps) });
+    return c.json({ welcome: await runWelcomeQueue(deps), reminders: await runReminders(deps) });
   };
   app.get('/internal/tick', tick);
   app.post('/internal/tick', tick);

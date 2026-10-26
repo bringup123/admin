@@ -126,6 +126,7 @@ Off: both other `create_item` webhooks (125529381, 153342135), the three-monthly
 ## ManyChat and Meta
 
 - **V3's tags** (created 2026-10-25 over the API): `v3_welcome` **99906572**, `v3_no_answer_3` **99906573**, `v3_no_answer_5` **99906574**. No automation behind them yet — `docs/manychat-build-sheet.html`. Adding one to a contact sends nothing until its automation exists.
+- **The reminders' tags and fields** (created over the API 2026-10-26, `scripts/manychat-reminder-fields.ts`): tags `v3_reminder_day` **99956955**, `v3_reminder_hour` **99956958**; text fields `V3_Meeting_Type` **15100098** («פגישת מיפוי הצרכים» / «פגישת הדמו»), `V3_Meeting_When` **15100099** («יום רביעי, 28.10 בשעה 11:00»), `V3_Meet_Code` **15100100** (`abc-defg-hij`, the Meet button's variable), `V3_Booking_Uid` **15100101** (the cal.com uid; `https://cal.com/booking/{{1}}` is the change-or-cancel page). Written only on a reminder.
 - **Fields V3 writes on every send:** `dafna_first_name` **14918920**, `dafna_lead_id` **14899233** (both the dafna project's; reused), **`V3_Name` 15098516** (the first name, for the templates' «היי {{1}}» — Ayala's field, 2026-10-26), and **`MOID` 14291950** — the card's link, `https://bringup-io.monday.com/boards/1753447162/views/23542451/pulses/<item id>` (Ayala, 2026-10-26). MOID was Bringi's and held a bare item id; anything of Bringi's still reading it as an id would now get a link.
 
 - Account «BringUp», Pro. API base `https://api.manychat.com`, token `MANYCHAT_API_TOKEN`.

@@ -15,6 +15,8 @@ describe('the switches start safe', () => {
       welcome: false,
       no_answer_3: false,
       no_answer_5: false,
+      reminder_day: false,
+      reminder_hour: false,
       allowlist_only: true,
     });
   });

@@ -1,5 +1,5 @@
 import { STATUS } from '../board.js';
-import type { CardWrite, CrmPort } from '../ports.js';
+import type { CardWrite, Clock, CrmPort } from '../ports.js';
 import type { Db } from '../db/db.js';
 import type { Env } from '../env.js';
 import { bookingPage, CALCOM_LEAD_QUESTION, cardBookingUrl } from './links.js';
@@ -87,6 +87,9 @@ export interface CalcomDeps {
   db: Db;
   env: Env;
   crm: CrmPort;
+  /** When a booking was recorded: a meeting booked inside a reminder's
+   *  window gets no reminder for it (src/domain/reminders.ts). */
+  clock: Clock;
 }
 
 interface BookingRow {
@@ -179,15 +182,17 @@ export async function handleCalcomWebhook(deps: CalcomDeps, body: unknown): Prom
       if (row.uid !== ev.uid) {
         await db.query("update bookings set status = 'cancelled', replaced_by = $2, updated_at = now() where uid = $1", [row.uid, ev.uid]);
         await db.query(
-          `insert into bookings (uid, monday_item_id, meeting, start_at, meeting_url) values ($1, $2, $3, $4, $5)
+          `insert into bookings (uid, monday_item_id, meeting, start_at, meeting_url, created_at) values ($1, $2, $3, $4, $5, $6)
            on conflict (uid) do update set start_at = excluded.start_at, meeting_url = coalesce(excluded.meeting_url, bookings.meeting_url), status = 'booked', updated_at = now()`,
-          [ev.uid, itemId, row.meeting, ev.start.toISOString(), ev.meetingUrl ?? null]
+          [ev.uid, itemId, row.meeting, ev.start.toISOString(), ev.meetingUrl ?? null, deps.clock.now().toISOString()]
         );
       } else {
-        await db.query('update bookings set start_at = $2, meeting_url = coalesce($3, meeting_url), updated_at = now() where uid = $1', [
+        // A move on the same uid counts as booked now, for the reminders.
+        await db.query('update bookings set start_at = $2, meeting_url = coalesce($3, meeting_url), created_at = $4, updated_at = now() where uid = $1', [
           row.uid,
           ev.start.toISOString(),
           ev.meetingUrl ?? null,
+          deps.clock.now().toISOString(),
         ]);
       }
       const { status: _keep, ...dates } = bookedWrite(row.meeting, ev.start, ev.uid, ev.meetingUrl);
@@ -228,12 +233,13 @@ export async function handleCalcomWebhook(deps: CalcomDeps, body: unknown): Prom
     "update bookings set status = 'cancelled', replaced_by = $3, updated_at = now() where monday_item_id = $1 and meeting = $2 and status = 'booked'",
     [itemId, meeting, ev.uid]
   );
-  await db.query('insert into bookings (uid, monday_item_id, meeting, start_at, meeting_url) values ($1, $2, $3, $4, $5)', [
+  await db.query('insert into bookings (uid, monday_item_id, meeting, start_at, meeting_url, created_at) values ($1, $2, $3, $4, $5, $6)', [
     ev.uid,
     itemId,
     meeting,
     ev.start.toISOString(),
     ev.meetingUrl ?? null,
+    deps.clock.now().toISOString(),
   ]);
   await crm.updateCard(itemId, bookedWrite(meeting, ev.start, ev.uid, ev.meetingUrl));
   await crm.postUpdate(
@@ -244,7 +250,7 @@ export async function handleCalcomWebhook(deps: CalcomDeps, body: unknown): Prom
   return { outcome: 'booked', itemId, meeting };
 }
 
-function formatIsrael(d: Date, timeZone: string): string {
+export function formatIsrael(d: Date, timeZone: string): string {
   return new Intl.DateTimeFormat('he-IL', { timeZone, dateStyle: 'short', timeStyle: 'short' }).format(d);
 }
 

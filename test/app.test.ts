@@ -68,7 +68,7 @@ describe('the switches', () => {
     const h = await harness();
     expect((await h.app.request('/internal/tick')).status).toBe(403);
     const res = await h.app.request('/internal/tick', { headers: { authorization: 'Bearer cron-secret' } });
-    expect(await res.json()).toEqual({ welcome: [] });
+    expect(await res.json()).toEqual({ welcome: [], reminders: [] });
   });
 });
 

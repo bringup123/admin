@@ -3,7 +3,7 @@
 > The source of truth for project state. Updated at the end of every working session (see AGENTS.md).
 
 - **Current stage:** **V3 is live, inside the test cage.** The welcome (proved on Ayala's handset) and «3 שיחות לא נענו» are switched on; «5 שיחות לא נענו» is off until its template is approved. Both cal.com event types — needs-mapping and the new demo — report to V3, and the dafna service no longer hears cal.com. The cage (`allowlist_only`) is on: only allowlisted numbers receive anything.
-- **Last updated:** 2026-10-26, afternoon.
+- **Last updated:** 2026-10-26, late afternoon.
 
 ## Done on 2026-10-25
 
@@ -25,7 +25,10 @@
 - **Ayala built the ManyChat automation on `v3_welcome`;** the template was approved and **the welcome arrived on her handset** from test card 3308729347. The first try left the card's status unchanged — the label had been removed from the board, and the whole write failed; fixed so a missing label is dropped and the rest written, and a sent welcome never re-queues.
 - **ManyChat fields:** every send writes the first name into `V3_Name` (what Ayala's V3 automations read) and the card's monday link into `MOID`.
 - **The demo meeting on cal.com is wired (T-005).** Sagi made the event type (7638021, «פגישת דמו עם שגיא») and a fresh API key; the hidden question `dafna_lead` added to it; webhooks on both event types to V3; **the dafna service's account-wide cal.com webhook switched off.** Ids in `docs/INTEGRATIONS.md`.
-- **«3 שיחות לא נענו» approved by Meta; its switch is on** (cage on). Not yet pressed.
+- **«3 שיחות לא נענו» approved by Meta; its switch is on** (cage on). **Pressed on the test card at 09:19 and sent.**
+- **A booking from the WhatsApp button did not reach its card.** The template's button is static, so the link carried no card id, and the test card has no email to fall back on. Fixed in the build sheet: the button is made dynamic by typing `{{1}}` at the end of the URL (the sheet had said not to). Ayala's first try at that met a red error in ManyChat — not yet seen. The booking itself was attached to the test card by replaying cal.com's delivery with the id, and the card filled exactly as designed.
+- **The demo link on the test card** — written by hand-run; the welcome writes it on every new card from now on. Older cards have neither link; a one-off fill is offered, not done.
+- **Two reminders before every meeting (T-013), built and off.** A day before (Saturday 21:00 instead of Shabbat) and an hour before with the Meet button, for needs-mapping and demo alike; the tick reads the live bookings, so cancellations and moves need nothing. ManyChat tags and fields created. Waiting on Sagi's wording, then Ayala's two templates.
 
 ## Superseded — kept for the record
 
@@ -36,8 +39,9 @@
 1. **Press «3 שיחות לא נענו» on the test card** (Ayala) and read the message and the card's note; a second press must send nothing.
 2. **Book from the test card** — a needs-mapping meeting and a demo (each link on the card), then reschedule and cancel each (T-011).
 3. «5 שיחות לא נענו»: template and automation (Ayala), then its switch and the same press.
-4. Aleksei: the dafna service's intake and queued work (T-001).
-5. Screenshots (T-006); the cage opened (T-012, with Sagi's go).
+4. The reminders (T-013): Sagi's wording, two Utility templates, the proof, then the board's old day-before reminder off.
+5. Aleksei: the dafna service's intake and queued work (T-001).
+6. Screenshots (T-006); the cage opened (T-012, with Sagi's go).
 
 ## Blockers and risks
 

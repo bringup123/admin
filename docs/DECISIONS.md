@@ -4,6 +4,16 @@ Every material architectural or product decision is recorded here **the moment i
 
 ---
 
+## 2026-10-26 — Two reminders before every meeting, timed by V3
+
+- **Decision:** a day before and an hour before every needs-mapping and demo meeting; the hour-before carries a button into the Meet room. V3 times them, ManyChat sends them. A day-before that falls on Shabbat goes on Saturday at 21:00. The board's old day-before reminder (workflow 1717270848, webhook 157656773) is switched off once the new ones are proved — not before, so no booked Lead is left with none. (Ayala, four answers.)
+- **Why V3 and not a ManyChat date trigger:** a ManyChat trigger on a date field does not hear a cancellation or a move, and one contact can hold a needs-mapping meeting and a demo at once. V3 already holds every booking with its state.
+- **Shape:** nothing scheduled ahead — the tick reads the live bookings (docs/ARCHITECTURE.md). Once per booking *and* meeting time, so a meeting moved on the same uid is reminded of its new time.
+- **Wording:** a draft in `docs/manychat-build-sheet.html`, **not to be submitted before Sagi approves it** (AGENTS.md, safety rule 1).
+- **Rejected:** a reminder for a meeting booked inside the window (it was chosen minutes ago); Saturday daytime sending.
+
+---
+
 ## 2026-10-26 — ManyChat's MOID holds the card's link
 
 - **Decision:** every send writes the card's monday URL into the contact's `MOID` field. (Ayala.)

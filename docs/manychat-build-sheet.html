@@ -75,10 +75,39 @@ AI לעסקים, מאיפה מתחילים: https://bringup.io/technological-sol
 <p><b>האוטומציה:</b> טריגר «Tag applied» = <span class="ltr">v3_no_answer_5</span> ← תבנית <span class="ltr">v3_no_answer_5</span>; אותו מיפוי. שם: «V3: 5 שיחות לא נענו».</p>
 </div>
 
+<h2>4 · תזכורת יום לפני פגישה</h2>
+<div class="card">
+<p><b>נוסח טיוטה — לא להגיש לפני ששגיא מאשר.</b></p>
+<p>שם התבנית: <span class="ltr">v3_reminder_day</span> · שפה: עברית · קטגוריה: <b>Utility</b> (תזכורת לפגישה שהליד קבע)</p>
+<pre>היי {{1}}, תזכורת לפגישה שלך עם שגיא מ-BringUp:
+{{2}}
+אם צריך לשנות מועד, אפשר בכפתור כאן למטה.</pre>
+<p>משתנים: <span class="ltr">{{1}}</span> ← <span class="ltr">V3_Name</span> · <span class="ltr">{{2}}</span> ← <span class="ltr">V3_Meeting_When</span> (למשל «יום רביעי, 28.10 בשעה 11:00» — היום, התאריך והשעה בשדה אחד, ולכן הנוסח לא אומר «מחר»).</p>
+<p>אם רוצים שהתזכורת תגיד איזו פגישה: השדה <span class="ltr">V3_Meeting_Type</span> מחזיק «פגישת מיפוי הצרכים» או «פגישת הדמו».</p>
+<p>כפתור: Visit website · טקסט: <b>שינוי או ביטול</b> · כתובת, עם <span class="ltr">{{1}}</span> בסוף:</p>
+<pre class="ltr">https://cal.com/booking/{{1}}</pre>
+<p>המשתנה של הכפתור ← <span class="ltr">V3_Booking_Uid</span>. דוגמה ל-Meta: <span class="ltr">iHqF6248odNdeq4kyeKLEY</span></p>
+<p><b>האוטומציה:</b> טריגר «Tag applied» = <span class="ltr">v3_reminder_day</span> ← תבנית <span class="ltr">v3_reminder_day</span>. שם: «V3: תזכורת יום לפני».</p>
+</div>
+
+<h2>5 · תזכורת שעה לפני פגישה</h2>
+<div class="card">
+<p><b>נוסח טיוטה — לא להגיש לפני ששגיא מאשר.</b></p>
+<p>שם התבנית: <span class="ltr">v3_reminder_hour</span> · שפה: עברית · קטגוריה: <b>Utility</b></p>
+<pre>היי {{1}}, הפגישה שלך עם שגיא מ-BringUp מתחילה בעוד שעה.
+להצטרפות לפגישה — בכפתור כאן למטה.</pre>
+<p>משתנים: <span class="ltr">{{1}}</span> ← <span class="ltr">V3_Name</span>.</p>
+<p>כפתור: Visit website · טקסט: <b>הצטרפות לפגישה</b> · כתובת, עם <span class="ltr">{{1}}</span> בסוף:</p>
+<pre class="ltr">https://meet.google.com/{{1}}</pre>
+<p>המשתנה של הכפתור ← <span class="ltr">V3_Meet_Code</span> (רק הקוד, למשל <span class="ltr">abc-defg-hij</span> — לא הכתובת המלאה). דוגמה ל-Meta: <span class="ltr">dny-ntue-ejq</span></p>
+<p><b>האוטומציה:</b> טריגר «Tag applied» = <span class="ltr">v3_reminder_hour</span> ← תבנית <span class="ltr">v3_reminder_hour</span>. שם: «V3: תזכורת שעה לפני».</p>
+</div>
+
 <h2>לפני שמדליקים</h2>
 <div class="card">
 <ul>
 <li>לבדוק שאף אוטומציה אחרת בחשבון לא מופעלת על התגיות האלה.</li>
+<li>התזכורות: אחרי שהן עובדות — לכבות את תזכורת «יום לפני פגישה» הישנה (אוטומציה במאנדיי שעוברת דרך מאניצ'אט), כדי שהליד לא יקבל שתיים.</li>
 <li>הניסוי הראשון — על כרטיס בדיקה עם טלפון שברשימת הבדיקה בלבד (המערכת שולחת רק אליו עד שפותחים את «רק למספרי בדיקה» במסך המתגים).</li>
 <li>תבנית Marketing כפופה למגבלת תדירות של Meta לכל משתמש: הודעה יכולה להיחסם בלי שאף מערכת תדווח על כך (נמצא בפרויקט דפנה, 9.9). לבדוק בטלפון, לא רק ביומן.</li>
 </ul>

@@ -12,6 +12,8 @@ Categories: **Added** / **Changed** / **Fixed** / **Removed**.
 - **The message after three unanswered calls is approved** by WhatsApp and switched on for test numbers.
 - **In ManyChat, each contact now carries the Lead's first name and a link straight to their card.**
 
+- **Two WhatsApp reminders before every meeting**, the needs-mapping one and the demo alike: a day before, and an hour before with a button straight into the video call. A reminder that would fall on Shabbat goes on Saturday night instead. A cancelled meeting gets none, a moved one is reminded of its new time, and a card someone has moved on (closed, not relevant) gets none. Built and switched off: the wording waits for Sagi, the messages for WhatsApp's approval.
+
 ### Changed
 - **The old system no longer hears about meetings.** Dafna's connection to the calendar is switched off; only the new system reads bookings.
 

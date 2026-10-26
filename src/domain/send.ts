@@ -12,6 +12,8 @@ export const TAGS: Record<MessageKind, string> = {
   welcome: 'v3_welcome',
   no_answer_3: 'v3_no_answer_3',
   no_answer_5: 'v3_no_answer_5',
+  reminder_day: 'v3_reminder_day',
+  reminder_hour: 'v3_reminder_hour',
 };
 
 export type Refusal =
@@ -66,7 +68,16 @@ function startOfLocalDay(now: Date, timeZone: string): Date {
 
 export async function sendMessage(
   deps: SendDeps,
-  input: { kind: MessageKind; itemId: string; rawPhone: string; cardName: string }
+  input: {
+    kind: MessageKind;
+    itemId: string;
+    rawPhone: string;
+    cardName: string;
+    /** Once per Lead unless said otherwise; a reminder is once per meeting. */
+    dedupeKey?: string;
+    /** More contact fields for this message's template to read. */
+    fields?: Record<string, string>;
+  }
 ): Promise<SendResult> {
   const { db, env, messenger, clock } = deps;
   const { kind, itemId } = input;
@@ -101,10 +112,11 @@ export async function sendMessage(
   if (!name) return refuse('no_first_name');
 
   // Once only, for ever. A second attempt conflicts here and sends nothing.
+  const dedupeKey = input.dedupeKey ?? `${kind}:${itemId}`;
   const inserted = await db.query<{ id: number }>(
     `insert into messages (monday_item_id, kind, dedupe_key, phone, created_at) values ($1, $2, $3, $4, $5)
      on conflict (dedupe_key) do nothing returning id`,
-    [itemId, kind, `${kind}:${itemId}`, phone, clock.now().toISOString()]
+    [itemId, kind, dedupeKey, phone, clock.now().toISOString()]
   );
   const row = inserted.rows[0];
   if (!row) return refuse('already_sent');
@@ -126,6 +138,7 @@ export async function sendMessage(
       // ManyChat reaches the card in one click (Ayala, 2026-10-26). MOID was
       // Bringi's field and held a bare item id; it holds the link from now on.
       MOID: cardUrl(itemId),
+      ...input.fields,
     });
     await messenger.applyTag(contactId, TAGS[kind]);
   } catch (err) {

@@ -111,6 +111,18 @@ T-002 (Sagi's answers) runs alongside; an answer may change a step.
 - priority: normal · created: 2026-10-25
 - description: the board, the card, both buttons, the four lists — on the test card, so nothing needs blurring.
 
+### T-013: Two reminders before every meeting
+- priority: high · created: 2026-10-26 (Ayala)
+- description: a day before and an hour before every needs-mapping and demo meeting; Saturday night instead of Shabbat; the hour-before with a Meet button. `docs/ARCHITECTURE.md`, «Meeting reminders».
+- acceptance criteria: each reminder sent once at its time; none for a cancelled meeting; a moved meeting reminded at its new time; a Sunday meeting's day-before on Saturday night; proved on the test card, then the board's old day-before reminder off.
+- steps:
+  - [x] the code and its tests (C, 2026-10-26)
+  - [x] ManyChat tags and fields (C, 2026-10-26)
+  - [ ] Sagi approves the wording (S)
+  - [ ] two Utility templates and two automations (Y, from the build sheet)
+  - [ ] proved on the test card: a meeting booked 25 hours ahead and one 2 hours ahead
+  - [ ] `reminder_day`, `reminder_hour` on; the old day-before reminder off (workflow 1717270848, webhook 157656773)
+
 ### T-012: Switch on
 - priority: high · created: 2026-10-25
 - steps:
