@@ -128,7 +128,7 @@ export function buildApp(deps: AppDeps): Hono {
   app.get('/switch', async (c) => {
     const t = c.req.query('token') ?? '';
     if (!tokenOk(t, env.adminToken)) return c.json({ error: 'forbidden' }, 403);
-    return c.html(switchPage(await readSwitches(db), t, env));
+    return c.html(switchPage(await readSwitches(db), t, env, new URL(c.req.url).origin));
   });
 
   app.post('/switch', async (c) => {
@@ -155,7 +155,7 @@ h1{font-size:1.4rem}.row{display:flex;justify-content:space-between;align-items:
 p.note{color:var(--muted);font-size:.9rem}</style></head><body><h1>${title}</h1>${body}</body></html>`;
 }
 
-function switchPage(sw: Record<SwitchKey, boolean>, token: string, env: Env): string {
+function switchPage(sw: Record<SwitchKey, boolean>, token: string, env: Env, origin: string): string {
   const rows = (Object.keys(SWITCHES) as SwitchKey[])
     .map((key) => {
       const on = sw[key];
@@ -167,5 +167,14 @@ function switchPage(sw: Record<SwitchKey, boolean>, token: string, env: Env): st
     env.appEnv === 'production'
       ? ''
       : '<p class="note">זו לא סביבת ייצור: נשלח רק למספרי בדיקה, בלי קשר למתג האחרון.</p>';
-  return page('מסע לקוח V3 — מתגים', `${rows}${prodNote}<p class="note">כל שינוי נרשם. ההודעות נשלחות רק כשגם המערכת פעילה וגם המתג של ההודעה פעיל.</p>`);
+  // The URL ManyChat's External Request posts a Lead's reply to. It holds a
+  // secret, so it is shown only here, behind the admin token.
+  const callback = manychatCallbackToken(env);
+  const callbackBox = callback
+    ? `<h2>הכתובת לחזרה ממאניצ'אט</h2><p class="note">ל-External Request בפלואו של התזכורת (דף ההוראות, סעיף 6). לא לשתף.</p><pre dir="ltr" style="white-space:pre-wrap;word-break:break-all;user-select:all">${origin}/webhooks/manychat?token=${callback}</pre>`
+    : '';
+  return page(
+    'מסע לקוח V3 — מתגים',
+    `${rows}${prodNote}<p class="note">כל שינוי נרשם. ההודעות נשלחות רק כשגם המערכת פעילה וגם המתג של ההודעה פעיל.</p>${callbackBox}`
+  );
 }

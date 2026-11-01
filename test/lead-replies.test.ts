@@ -46,3 +46,14 @@ describe('a Lead’s reply from WhatsApp, back on the card', () => {
     expect((await post(h, { leadId: '30', event: 'confirmed' }, '')).status).toBe(403);
   });
 });
+
+describe('the callback URL', () => {
+  it('is on the switch page, behind the admin token, and nowhere else', async () => {
+    const h = await harness();
+    const token = manychatCallbackToken(h.env);
+    const page = await (await h.app.request('/switch?token=admin-token')).text();
+    expect(page).toContain(`/webhooks/manychat?token=${token}`);
+    expect((await h.app.request('/switch?token=wrong')).status).toBe(403);
+    expect(await (await h.app.request('/health')).text()).not.toContain(token);
+  });
+});

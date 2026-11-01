@@ -109,7 +109,7 @@ AI לעסקים, מאיפה מתחילים: https://bringup.io/technological-sol
 <h2>6 · מהכפתורים בתזכורת חזרה ל-monday</h2>
 <div class="card">
 <p>בפלואו «V3: תזכורת יום לפני», אחרי ההודעה של כל כפתור, צעד נוסף: <b>Action → External Request</b>.</p>
-<p>Method: <b>POST</b> · URL — מ-<span class="ltr">scripts/manychat-callback-url.ts</span> (הכתובת כוללת סוד, ולכן היא לא כתובה כאן; היא נגזרת מ-<span class="ltr">CRON_SECRET</span>).</p>
+<p>Method: <b>POST</b> · URL — להעתיק מתחתית <b>מסך המתגים</b> («הכתובת לחזרה ממאניצ'אט»). היא כוללת סוד, ולכן היא לא כתובה כאן.</p>
 <p>Headers: <span class="ltr">Content-Type: application/json</span></p>
 <p>Body בכפתור «מאשר/ת הגעה» — להדביק, ואז להכניס את השדה <span class="ltr">dafna_lead_id</span> (דרך <span class="ltr">{+}</span>) בין המירכאות הריקות:</p>
 <pre class="ltr">{"leadId": "", "event": "confirmed"}</pre>

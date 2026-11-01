@@ -53,7 +53,7 @@ Two WhatsApps before every needs-mapping and demo meeting — **a day before** a
 
 ### A Lead's reply, back on the card (`src/domain/lead-replies.ts`, 2026-11-01)
 
-The day-before reminder's two quick replies, «מאשר/ת הגעה» and «שינוי מועד», each run a ManyChat External Request to `POST /webhooks/manychat?token=…` with `{"leadId": <dafna_lead_id>, "event": "confirmed" | "reschedule_requested"}`. V3 puts an update on the card naming the next booked meeting; nothing is sent and no column changes. A real move or cancellation still arrives from cal.com. The token is derived from `CRON_SECRET` (no setting of its own); `scripts/manychat-callback-url.ts` prints the whole URL.
+The day-before reminder's two quick replies, «מאשר/ת הגעה» and «שינוי מועד», each run a ManyChat External Request to `POST /webhooks/manychat?token=…` with `{"leadId": <dafna_lead_id>, "event": "confirmed" | "reschedule_requested"}`. V3 puts an update on the card naming the next booked meeting; nothing is sent and no column changes. A real move or cancellation still arrives from cal.com. The token is derived from `CRON_SECRET` (no setting of its own); The whole URL is shown at the foot of the switch page (behind the admin token), and `scripts/manychat-callback-url.ts` prints it.
 
 ## Safety rails
 
