@@ -128,7 +128,9 @@ export function buildApp(deps: AppDeps): Hono {
   app.get('/switch', async (c) => {
     const t = c.req.query('token') ?? '';
     if (!tokenOk(t, env.adminToken)) return c.json({ error: 'forbidden' }, 403);
-    return c.html(switchPage(await readSwitches(db), t, env, new URL(c.req.url).origin));
+    // Vercel hands the function plain http; the address the world uses is https.
+    const origin = new URL(c.req.url).origin.replace(/^http:\/\/(?!localhost|127\.0\.0\.1)/, 'https://');
+    return c.html(switchPage(await readSwitches(db), t, env, origin));
   });
 
   app.post('/switch', async (c) => {
