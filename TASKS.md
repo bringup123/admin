@@ -119,7 +119,9 @@ T-002 (Sagi's answers) runs alongside; an answer may change a step.
   - [x] the code and its tests (C, 2026-10-26)
   - [x] ManyChat tags and fields (C, 2026-10-26)
   - [ ] Sagi approves the wording (S)
-  - [ ] two Utility templates and two automations (Y, from the build sheet)
+  - [x] two Utility templates (Y, 2026-10-28) — the day-before with two quick replies, the hour-before with the Meet button
+  - [ ] the two automations, and the External Requests that bring the replies back (Y, build sheet sections 4–6)
+  - [x] the replies back on the card — `POST /webhooks/manychat` (C, 2026-11-01)
   - [ ] proved on the test card: a meeting booked 25 hours ahead and one 2 hours ahead
   - [ ] `reminder_day`, `reminder_hour` on; the old day-before reminder off (workflow 1717270848, webhook 157656773)
 

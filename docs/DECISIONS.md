@@ -4,6 +4,14 @@ Every material architectural or product decision is recorded here **the moment i
 
 ---
 
+## 2026-11-01 — ManyChat reports a Lead's reply to V3, which notes it on the card
+
+- **Decision:** the reminder's «confirm» and «change» replies come back to the card as updates (Ayala). Through V3, not a ManyChat → monday integration: V3 already knows the card and the next meeting, and every write to the board goes one way.
+- **The URL's secret is derived from `CRON_SECRET`** (HMAC), so it needed no new setting on Vercel. Rotating `CRON_SECRET` changes it, and the URL in ManyChat must be pasted again.
+- **No status is written:** «confirmed» says nothing the status does not; «change» may never become a change.
+
+---
+
 ## 2026-10-26 — Two reminders before every meeting, timed by V3
 
 - **Decision:** a day before and an hour before every needs-mapping and demo meeting; the hour-before carries a button into the Meet room. V3 times them, ManyChat sends them. A day-before that falls on Shabbat goes on Saturday at 21:00. The board's old day-before reminder (workflow 1717270848, webhook 157656773) is switched off once the new ones are proved — not before, so no booked Lead is left with none. (Ayala, four answers.)

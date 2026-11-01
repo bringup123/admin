@@ -3,7 +3,7 @@
 > The source of truth for project state. Updated at the end of every working session (see AGENTS.md).
 
 - **Current stage:** **V3 is live, inside the test cage.** The welcome (proved on Ayala's handset) and «3 שיחות לא נענו» are switched on; «5 שיחות לא נענו» is off until its template is approved. Both cal.com event types — needs-mapping and the new demo — report to V3, and the dafna service no longer hears cal.com. The cage (`allowlist_only`) is on: only allowlisted numbers receive anything.
-- **Last updated:** 2026-10-26, late afternoon.
+- **Last updated:** 2026-11-01.
 
 ## Done on 2026-10-25
 
@@ -43,7 +43,17 @@
 5. Aleksei: the dafna service's intake and queued work (T-001).
 6. Screenshots (T-006); the cage opened (T-012, with Sagi's go).
 
+## 2026-11-01
+
+- **Eleven real Leads since 26.10 got no welcome** — the cage (`allowlist_only`) is still shut, as it was left; each was settled «not_allowlisted» and, by design, will not be sent later. That is also why none of them has a ManyChat contact or a MOID link: the contact is made at the send. Ayala: wait on them; opening the cage is still to be decided.
+- **Every booking is copied onto the Lead's ManyChat contact** (when, which meeting, the Meet link and code, the booking uid) — deployed 2026-10-28.
+- **A real Lead's booking matched by itself** (3294982126, 28.10) — the card link with the id works.
+- **ManyChat → monday:** the reminder's «מאשר/ת הגעה» and «שינוי מועד» report back to `POST /webhooks/manychat` and become an update on the card. Built, tested, deployed; the External Requests are Ayala's (build sheet, section 6).
+- **This cloud session cannot reach BringUp's monday any more.** Every request to `api.monday.com` from the container answers as «System Admin» on another account (`modus-media`) whatever token is sent, even none — something on the way injects a credential. Production on Vercel is not affected (its tick read a new card at 06:29). Until it is fixed, a session here cannot read or write the board.
+
 ## Blockers and risks
+
+- **monday from the cloud session answers as another account** (above). Check the claude.ai monday connector and the environment.
 
 - **The dafna service is still writing to new cards while its kill switch is on.** Read off the board on 2026-10-26: card 3308222546, created 25.10 at 20:04 UTC — five hours after the kill switch — got «נשלחה הודעה ראשונה», «תתקשר» and a booking link from it (user 111299087), and 3307165902 was moved to «נורצ'ר» by its 24-hour nudge the same evening. The kill switch stops what it *sends*; its intake and its labels go on. Two consequences: the cards say a first message went when it did not, and **whatever it queued is parked, not cancelled — lifting its kill switch would send it.** Aleksei: `LEAD_INTAKE_ENABLED` off and the queued work cancelled (T-001). V3 tolerates the label: «נשלחה הודעה ראשונה» still counts as a new Lead.
 

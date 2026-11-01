@@ -51,6 +51,10 @@ Two WhatsApps before every needs-mapping and demo meeting — **a day before** a
 - **Like the welcome,** a reminder its switch held back is settled, not sent later; a ManyChat failure is tried again next tick.
 - **The send:** the usual guards and contact; the fields `V3_Meeting_Type`, `V3_Meeting_When`, `V3_Meet_Code`, `V3_Booking_Uid`; then the tag `v3_reminder_day` / `v3_reminder_hour`. A note on the card says it went.
 
+### A Lead's reply, back on the card (`src/domain/lead-replies.ts`, 2026-11-01)
+
+The day-before reminder's two quick replies, «מאשר/ת הגעה» and «שינוי מועד», each run a ManyChat External Request to `POST /webhooks/manychat?token=…` with `{"leadId": <dafna_lead_id>, "event": "confirmed" | "reschedule_requested"}`. V3 puts an update on the card naming the next booked meeting; nothing is sent and no column changes. A real move or cancellation still arrives from cal.com. The token is derived from `CRON_SECRET` (no setting of its own); `scripts/manychat-callback-url.ts` prints the whole URL.
+
 ## Safety rails
 
 - **Kill switch** — `v3.control.interactions_enabled`, **off at first boot**. The bookmark `GET /kill?token=…` stops everything that reaches a Lead; the switch page `/switch?token=…` shows and sets every switch.

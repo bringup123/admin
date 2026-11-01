@@ -4,6 +4,15 @@ All material changes to the project, newest first.
 Format follows [Keep a Changelog](https://keepachangelog.com/); written in business language, readable by a non-technical reader.
 Categories: **Added** / **Changed** / **Fixed** / **Removed**.
 
+## 2026-11-01 — What the Lead answers comes back to the card
+
+### Added
+- **When a Lead presses «I'll be there» or «change the time» on the meeting reminder, the card says so** — an update naming the meeting, for the rep and Sagi to read. Nothing is sent back and nothing on the card changes; an actual move or cancellation still arrives from the calendar by itself.
+- **Every meeting booked is also kept on the Lead's WhatsApp contact** — when, which meeting, the link — so it can be read there and used by the messages.
+
+### Noted
+- **No new Lead has been welcomed yet:** the system is still in «test numbers only». Eleven Leads arrived since 26.10; they are the rep's, and switching on later will not send them a late welcome.
+
 ## 2026-10-26 — The welcome reaches a telephone, and the demo meeting has its own link
 
 ### Added
