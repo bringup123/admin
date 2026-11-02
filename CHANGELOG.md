@@ -4,6 +4,11 @@ All material changes to the project, newest first.
 Format follows [Keep a Changelog](https://keepachangelog.com/); written in business language, readable by a non-technical reader.
 Categories: **Added** / **Changed** / **Fixed** / **Removed**.
 
+## 2026-11-02 — Live for real Leads
+
+### Changed
+- **The system now writes to real Leads, not only to test numbers.** Every new Lead gets the welcome on WhatsApp; the rep's «3 calls unanswered» button sends its message; a Lead who writes in gets the thank-you. The «5 calls» message and the meeting reminders stay off until their WhatsApp side is ready. No more than 100 messages a day, and each message at most once per Lead.
+
 ## 2026-11-02 — What a Lead writes reaches the card
 
 ### Added

@@ -4,6 +4,15 @@ Every material architectural or product decision is recorded here **the moment i
 
 ---
 
+## 2026-11-02 — The cage is opened: V3 messages real Leads
+
+- **Decision:** `allowlist_only` off (Ayala: «I want everything we built active, not only test numbers»). Live from then on: the welcome to every new Lead, the «3 שיחות לא נענו» button, and the thank-you to a Lead who types. Still off because their ManyChat half is not confirmed ready: `no_answer_5`, `reminder_day`, `reminder_hour`.
+- **Against the contract:** T-012 asked for Sagi's go before the cage opened, and the thank-you is Ayala's wording, not Sagi's (safety rule 1). Ayala's call, recorded as hers.
+- **Not sent retroactively:** the eleven Leads refused by the cage since 26.10 stay unsent — Ayala, «wait».
+- **The wall that stays:** `MAX_MESSAGES_PER_DAY` = 100, once-only per message, the kill switch.
+
+---
+
 ## 2026-11-02 — A typed message goes onto the card, and is thanked once
 
 - **Decision:** what a Lead types in WhatsApp becomes an update on their card; they are answered «תודה על ההודעה, הצוות שלנו יצור איתך קשר בהקדם.» (Ayala's wording — not Sagi's; recorded as hers). Replaces Dafna's Default Reply flow, which still offered her menu and called the paused service.

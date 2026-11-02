@@ -59,6 +59,8 @@
 
 - **ManyChat's Default Reply was still Dafna's flow** (her choice menu, an External Request to the paused service). Replaced by V3's: the words onto the card, and Ayala's «תודה על ההודעה…» once in 12 hours behind the new switch `text_reply` (off). Built, 74 tests, deployed; the flow itself is Ayala's (build sheet, section 7).
 
+- **The cage is open (2026-11-02, Ayala's word).** Real Leads now get the welcome, the three-calls message on the button, and the thank-you when they type. Off until their ManyChat half is confirmed: the five-calls message and the two reminders. Daily cap 100.
+
 ## Blockers and risks
 
 - **monday from the cloud session answers as another account** (above). Check the claude.ai monday connector and the environment.

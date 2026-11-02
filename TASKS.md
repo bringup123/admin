@@ -137,7 +137,8 @@ T-002 (Sagi's answers) runs alongside; an answer may change a step.
 ### T-012: Switch on
 - priority: high · created: 2026-10-25
 - steps:
-  - [ ] the kill switch on, the cage on — only allowlisted numbers
+  - [x] the kill switch on, the cage on — only allowlisted numbers
+  - [x] **the cage opened** — 2026-11-02, Ayala's word (welcome, no_answer_3, text_reply live)
   - [ ] `welcome` on; watched on the next real Lead with the cage open
   - [ ] `no_answer_3`, `no_answer_5` on
   - [ ] Sagi told
