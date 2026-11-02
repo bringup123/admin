@@ -42,7 +42,8 @@ T-002 (Sagi's answers) runs alongside; an answer may change a step.
 - acceptance criteria: for each sender, «off» with who and when, or «kept» with Sagi's word; a test card created on the board receives nothing but what V3 sends.
 - steps:
   - [x] the dafna service — kill switch, 2026-10-25
-  - [ ] the dafna service's per-path switches (A, settings screen): `CHOICE_FLOW_ENABLED`, `LEAD_INTAKE_ENABLED`, `OUTREACH_SEND`, `GREETING_SEND` off; `PRE_CALL_NOTICE_MINUTES=0`; `MAX_CALLS_PER_DAY=0`; queued `choice_timeout` cancelled
+  - [x] **the dafna service paused on Vercel**, 2026-11-02 (Ayala's go) — supersedes the per-path switches below
+  - [ ] ~~the dafna service's per-path switches (A, settings screen)~~: `CHOICE_FLOW_ENABLED`, `LEAD_INTAKE_ENABLED`, `OUTREACH_SEND`, `GREETING_SEND` off; `PRE_CALL_NOTICE_MINUTES=0`; `MAX_CALLS_PER_DAY=0`; queued `choice_timeout` cancelled
   - [x] the dafna service's cal.com webhook (user-level) off — 1358828b…, 2026-10-26, with V3's going on (T-005)
   - [ ] the eleven undocumented board webhooks named and, if they send, removed (A) — **first 157508715 (status = «נקבעה פגישה»), which V3 will set off on every booking**
   - [ ] the ManyChat automations behind «ליד חדש», «נקבעה פגישה», «יום לפני פגישה», «שעה לפני פגישה», `wave2_*`, and Bringi's follow-ups (A)

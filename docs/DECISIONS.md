@@ -4,6 +4,14 @@ Every material architectural or product decision is recorded here **the moment i
 
 ---
 
+## 2026-11-02 — The dafna service is paused on Vercel
+
+- **Decision:** the whole dafna project paused (Ayala, after Sagi found new Leads in «נורצ'ר»). Its kill switch had stopped only what it *sent*: its intake still polled the board every few minutes, stamped new cards, and its one-day timeout moved them to «נורצ'ר». Seen live: `/internal/poll` → `runIntake` still running on 31.10.
+- **What it costs:** nothing V3 needs — cal.com reports to V3 since 26.10. The dafna monday webhooks and ManyChat External Requests still pointing at it now get 503; they send nothing.
+- **Undo:** Vercel → project `dafna` → Unpause (or the API's unpause). Unpausing restarts its intake and whatever jobs it had queued.
+
+---
+
 ## 2026-11-01 — ManyChat reports a Lead's reply to V3, which notes it on the card
 
 - **Decision:** the reminder's «confirm» and «change» replies come back to the card as updates (Ayala). Through V3, not a ManyChat → monday integration: V3 already knows the card and the next meeting, and every write to the board goes one way.

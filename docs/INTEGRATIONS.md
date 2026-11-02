@@ -105,7 +105,7 @@ The Make organisation reachable from the claude.ai connector («Haruv», eu1) is
 
 ## Vercel
 
-- Team `admin-23308494s-projects` (`team_6ME8IIFubWy8tTVbDFG66PS0`). V3's project **`bringup-v3`** (`prj_UTZMLTJGDEtKm9uzFKRhQKNpwBDY`), linked to `bringup123/admin`, Vercel Authentication off (the routes check their own tokens; monday and cal.com must reach them). **Production URL: https://bringup-v3.vercel.app** — production deploys from `claude/clever-goodall-bs7uzy`, the repo's only branch, until a `main` exists. On 2026-10-25 it built and answered 500 on `/health`, as it must with no `DATABASE_URL`. The dafna project is `prj_k3T4ljPOWzaZWZwO1WO6iubBYy14`.
+- Team `admin-23308494s-projects` (`team_6ME8IIFubWy8tTVbDFG66PS0`). V3's project **`bringup-v3`** (`prj_UTZMLTJGDEtKm9uzFKRhQKNpwBDY`), linked to `bringup123/admin`, Vercel Authentication off (the routes check their own tokens; monday and cal.com must reach them). **Production URL: https://bringup-v3.vercel.app** — production deploys from `claude/clever-goodall-bs7uzy`, the repo's only branch, until a `main` exists. On 2026-10-25 it built and answered 500 on `/health`, as it must with no `DATABASE_URL`. The dafna project is `prj_k3T4ljPOWzaZWZwO1WO6iubBYy14` — **paused since 2026-11-02** (it answers 503 `DEPLOYMENT_PAUSED`).
 
 ### What Ayala switched off on 2026-10-26 (read back from the API)
 

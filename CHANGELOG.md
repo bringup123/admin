@@ -4,6 +4,11 @@ All material changes to the project, newest first.
 Format follows [Keep a Changelog](https://keepachangelog.com/); written in business language, readable by a non-technical reader.
 Categories: **Added** / **Changed** / **Fixed** / **Removed**.
 
+## 2026-11-02 — The old system is switched off completely
+
+### Fixed
+- **New Leads were still being moved to «נורצ'ר».** The old Dafna system had stopped sending, but it went on reading the board and moving every new Lead to «נורצ'ר» a day after it arrived. It is now switched off entirely. New Leads stay where they arrive; the few it already moved need moving back by hand.
+
 ## 2026-11-01 — What the Lead answers comes back to the card
 
 ### Added

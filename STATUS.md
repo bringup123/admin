@@ -51,11 +51,16 @@
 - **ManyChat → monday:** the reminder's «מאשר/ת הגעה» and «שינוי מועד» report back to `POST /webhooks/manychat` and become an update on the card. Built, tested, deployed; the External Requests are Ayala's (build sheet, section 6).
 - **This cloud session cannot reach BringUp's monday any more.** Every request to `api.monday.com` from the container answers as «System Admin» on another account (`modus-media`) whatever token is sent, even none — something on the way injects a credential. Production on Vercel is not affected (its tick read a new card at 06:29). Until it is fixed, a session here cannot read or write the board.
 
+## 2026-11-02
+
+- **Sagi saw new Leads in «נורצ'ר» again.** The cause was the dafna service: its kill switch stopped its messages but not its intake, which polled the board and, a day later, moved new cards to «נורצ'ר». **The dafna Vercel project is paused** (Ayala's go, 2026-11-02, about 11:45 UTC); it answers `DEPLOYMENT_PAUSED`. The cards it already moved need putting back by hand — this session cannot write the board (below).
+- **Both monday routes from this session answer as another account** — the container's (`modus-media`) and now the claude.ai connector's (`helion-eltra-company`, «Admin Admin»). The board is out of reach from here.
+
 ## Blockers and risks
 
 - **monday from the cloud session answers as another account** (above). Check the claude.ai monday connector and the environment.
 
-- **The dafna service is still writing to new cards while its kill switch is on.** Read off the board on 2026-10-26: card 3308222546, created 25.10 at 20:04 UTC — five hours after the kill switch — got «נשלחה הודעה ראשונה», «תתקשר» and a booking link from it (user 111299087), and 3307165902 was moved to «נורצ'ר» by its 24-hour nudge the same evening. The kill switch stops what it *sends*; its intake and its labels go on. Two consequences: the cards say a first message went when it did not, and **whatever it queued is parked, not cancelled — lifting its kill switch would send it.** Aleksei: `LEAD_INTAKE_ENABLED` off and the queued work cancelled (T-001). V3 tolerates the label: «נשלחה הודעה ראשונה» still counts as a new Lead.
+- ~~**The dafna service is still writing to new cards while its kill switch is on.**~~ **Resolved 2026-11-02: the dafna project is paused on Vercel.** Read off the board on 2026-10-26: card 3308222546, created 25.10 at 20:04 UTC — five hours after the kill switch — got «נשלחה הודעה ראשונה», «תתקשר» and a booking link from it (user 111299087), and 3307165902 was moved to «נורצ'ר» by its 24-hour nudge the same evening. The kill switch stops what it *sends*; its intake and its labels go on. Two consequences: the cards say a first message went when it did not, and **whatever it queued is parked, not cancelled — lifting its kill switch would send it.** Aleksei: `LEAD_INTAKE_ENABLED` off and the queued work cancelled (T-001). V3 tolerates the label: «נשלחה הודעה ראשונה» still counts as a new Lead.
 
 - **Cards that existed before the welcome have no «לינק לפגישת דמו».** The welcome writes both booking links; older cards need a one-off fill if the rep is to send them a demo link from the card.
 - **Sagi's new cal.com key passed through the chat.** Rotate it once V3 is proved.
