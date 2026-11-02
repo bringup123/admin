@@ -80,7 +80,7 @@ T-002 (Sagi's answers) runs alongside; an answer may change a step.
 - steps:
   - [x] the welcome — approved, automation on `v3_welcome` built (Y); proved on Ayala's handset 2026-10-26
   - [x] «3 שיחות לא נענו» — approved 2026-10-26 (Y); the `no_answer_3` switch on, cage on
-  - [ ] «5 שיחות לא נענו» — template and automation (Y)
+  - [x] «5 שיחות לא נענו» — template approved, automation built (Y); switched on 2026-11-02
 
 ### T-009: Deploy ✓ 2026-10-26
 - priority: high · created: 2026-10-25
