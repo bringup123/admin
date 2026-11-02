@@ -61,6 +61,8 @@
 
 - **The cage is open (2026-11-02, Ayala's word).** Real Leads now get the welcome, the three-calls message on the button, and the thank-you when they type. Off until their ManyChat half is confirmed: the five-calls message and the two reminders. Daily cap 100.
 
+- **The two reminders switched on** (2026-11-02, Ayala's word). Their ManyChat flows exist (`v3_reminder_day`, `v3_reminder_hour`); whether published is Ayala's. **The board's old day-before reminder (workflow 1717270848 → webhook 157656773 → ManyChat «יום לפני פגישה») must go off now**, or a needs-mapping meeting gets two — this session cannot reach the board, so it is Ayala's.
+
 ## Blockers and risks
 
 - **monday from the cloud session answers as another account** (above). Check the claude.ai monday connector and the environment.
