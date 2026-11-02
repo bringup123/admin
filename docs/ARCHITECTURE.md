@@ -55,10 +55,14 @@ Two WhatsApps before every needs-mapping and demo meeting — **a day before** a
 
 The day-before reminder's two quick replies, «מאשר/ת הגעה» and «שינוי מועד», each run a ManyChat External Request to `POST /webhooks/manychat?token=…` with `{"leadId": <dafna_lead_id>, "event": "confirmed" | "reschedule_requested"}`. V3 puts an update on the card naming the next booked meeting; nothing is sent and no column changes. A real move or cancellation still arrives from cal.com. The token is derived from `CRON_SECRET` (no setting of its own); The whole URL is shown at the foot of the switch page (behind the admin token), and `scripts/manychat-callback-url.ts` prints it.
 
+### A Lead who types a message (`src/domain/lead-text.ts`, 2026-11-02)
+
+ManyChat's **Default Reply** (WhatsApp) — the flow that ran Dafna's choice menu until 2026-11-02 — posts `{"leadId", "event": "text", "text", "phone"}` to the same `POST /webhooks/manychat`. The words go onto the card as an update («הליד כתב בוואטסאפ: «…»»); a contact with no card id is kept as `lead_text_unmatched` with the number. The answer carries `ack: yes|no`, which ManyChat maps into `V3_Ack` and a Condition reads before sending the thank-you. **yes** only when the kill switch and `text_reply` are on, the number passes the cage, and this number was not thanked in the last 12 hours. ManyChat pastes fields into the body raw, so a body broken by the Lead's own quotation marks is read leniently.
+
 ## Safety rails
 
 - **Kill switch** — `v3.control.interactions_enabled`, **off at first boot**. The bookmark `GET /kill?token=…` stops everything that reaches a Lead; the switch page `/switch?token=…` shows and sets every switch.
-- **One switch per message** — `welcome`, `no_answer_3`, `no_answer_5`, `reminder_day`, `reminder_hour`, all off by default, on the switch page.
+- **One switch per message** — `welcome`, `no_answer_3`, `no_answer_5`, `reminder_day`, `reminder_hour`, `text_reply`, all off by default, on the switch page.
 - **The cage** — `allowlist_only`, on by default **even in production**: only `PHONE_ALLOWLIST` numbers are messaged until it is opened. Outside production the allowlist always applies, whatever the switch says.
 - **Daily cap** — `MAX_MESSAGES_PER_DAY`; a bug hits a wall.
 - **Once only** — every message has a dedupe key (`welcome:<item>`, `no_answer_3:<item>`, `no_answer_5:<item>`; a reminder `reminder_day:<booking uid>:<start>`, so a moved meeting is reminded again); a second attempt sends nothing.

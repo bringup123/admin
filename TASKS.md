@@ -126,6 +126,14 @@ T-002 (Sagi's answers) runs alongside; an answer may change a step.
   - [ ] proved on the test card: a meeting booked 25 hours ahead and one 2 hours ahead
   - [ ] `reminder_day`, `reminder_hour` on; the old day-before reminder off (workflow 1717270848, webhook 157656773)
 
+### T-014: A typed message onto the card, and a thank-you
+- priority: high · created: 2026-11-02 (Ayala)
+- acceptance criteria: a Lead's typed message is an update on their card; they are thanked once in 12 hours, behind `text_reply`, the kill switch and the cage; Dafna's Default Reply gone.
+- steps:
+  - [x] the code and its tests; `V3_Ack` in ManyChat (C, 2026-11-02)
+  - [ ] the Default Reply flow (Y, build sheet section 7)
+  - [ ] proved from the test handset, then `text_reply` on
+
 ### T-012: Switch on
 - priority: high · created: 2026-10-25
 - steps:

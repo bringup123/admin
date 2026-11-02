@@ -57,6 +57,8 @@
 - **Everything of Dafna's, checked 2026-11-02:** the Vercel project paused (503 `DEPLOYMENT_PAUSED`); NLPearl — all six outbound campaigns and the one inbound agent not running (status 2), no Leads queued, the account's credit at 0, the last call 22.10; cal.com — its account-wide webhook inactive since 26.10. Still calling the paused address, harmlessly: Supabase `pg_cron` (`dafna_tick`, `dafna_poll`) and the dafna repo's GitHub Actions `cron.yml` — both get 503. **Not reachable over an API, so a person checks:** the ManyChat automations named «דפנה: …» (21 flows) — only the paused service adds their tags, but the first message's quick replies and the Default Reply edit (T-091) answer a Lead who taps or types on an old message.
 - **Both monday routes from this session answer as another account** — the container's (`modus-media`) and now the claude.ai connector's (`helion-eltra-company`, «Admin Admin»). The board is out of reach from here.
 
+- **ManyChat's Default Reply was still Dafna's flow** (her choice menu, an External Request to the paused service). Replaced by V3's: the words onto the card, and Ayala's «תודה על ההודעה…» once in 12 hours behind the new switch `text_reply` (off). Built, 74 tests, deployed; the flow itself is Ayala's (build sheet, section 7).
+
 ## Blockers and risks
 
 - **monday from the cloud session answers as another account** (above). Check the claude.ai monday connector and the environment.

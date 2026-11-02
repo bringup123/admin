@@ -118,6 +118,21 @@ AI לעסקים, מאיפה מתחילים: https://bringup.io/technological-sol
 <p>מה קורה: בכרטיס נכתב עדכון «הליד אישר הגעה לפגישת מיפוי הצרכים (יום…, … בשעה …)» או «הליד ביקש לשנות מועד…». שום הודעה לא נשלחת ושום עמודה לא משתנה.</p>
 </div>
 
+<h2>7 · ליד שכותב הודעה (Default Reply)</h2>
+<div class="card">
+<p>מחליף את הפלואו של דפנה. Automation → Default Reply → WhatsApp → פלואו חדש, «V3: ליד כתב הודעה». בפלואו שלושה צעדים, לפי הסדר:</p>
+<ol>
+<li><b>Action → External Request</b> · POST · URL — מתחתית מסך המתגים (אותה כתובת של סעיף 6) · Header <span class="ltr">Content-Type: application/json</span> · Body — להדביק, ואז להכניס בין המירכאות הריקות, דרך <span class="ltr">{+}</span>: אחרי leadId את <span class="ltr">dafna_lead_id</span>, אחרי text את <b>Last Text Input</b> (שדה מערכת), אחרי phone את <b>WhatsApp Phone</b> (שדה מערכת):
+<pre class="ltr">{"leadId": "", "event": "text", "text": "", "phone": ""}</pre>
+<b>Response Mapping:</b> <span class="ltr">$.ack</span> → השדה <span class="ltr">V3_Ack</span>.</li>
+<li><b>Condition</b>: <span class="ltr">V3_Ack</span> is <span class="ltr">yes</span>.</li>
+<li>מהענף «כן» של התנאי: <b>Send Message</b> (טקסט רגיל):
+<pre>תודה על ההודעה, הצוות שלנו יצור קשר בהקדם.</pre>
+מהענף «לא» — כלום.</li>
+</ol>
+<p>מה קורה: מה שהליד כתב נכנס כעדכון בכרטיס שלו, תמיד. התודה יוצאת רק כשהמתג «תשובה אוטומטית לליד שכתב הודעה» דולק במסך המתגים, ולכל מספר פעם אחת ב-12 שעות.</p>
+</div>
+
 <h2>לפני שמדליקים</h2>
 <div class="card">
 <ul>

@@ -4,6 +4,14 @@ All material changes to the project, newest first.
 Format follows [Keep a Changelog](https://keepachangelog.com/); written in business language, readable by a non-technical reader.
 Categories: **Added** / **Changed** / **Fixed** / **Removed**.
 
+## 2026-11-02 — What a Lead writes reaches the card
+
+### Added
+- **Whatever a Lead writes in WhatsApp now appears on their card**, so the rep reads it without opening ManyChat. They are answered «תודה על ההודעה, הצוות שלנו יצור קשר בהקדם.» — once, even if they write several lines — once the switch for it is on.
+
+### Removed
+- **Dafna's automatic answer to a typed message**, which still offered her old menu.
+
 ## 2026-11-02 — The old system is switched off completely
 
 ### Fixed

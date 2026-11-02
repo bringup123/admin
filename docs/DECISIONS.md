@@ -4,6 +4,14 @@ Every material architectural or product decision is recorded here **the moment i
 
 ---
 
+## 2026-11-02 — A typed message goes onto the card, and is thanked once
+
+- **Decision:** what a Lead types in WhatsApp becomes an update on their card; they are answered «תודה על ההודעה, הצוות שלנו יצור קשר בהקדם.» (Ayala's wording — not Sagi's; recorded as hers). Replaces Dafna's Default Reply flow, which still offered her menu and called the paused service.
+- **Once in 12 hours per number,** decided by V3 and read by a ManyChat Condition — a Lead who writes three lines is thanked once. Behind its own switch `text_reply`, the kill switch and the cage, like every message; the update on the card does not wait for any switch, since it reaches no one.
+- **Rejected:** ManyChat's own «once per 24 hours» on the Default Reply — it would also drop every later message before it reached the card.
+
+---
+
 ## 2026-11-02 — The dafna service is paused on Vercel
 
 - **Decision:** the whole dafna project paused (Ayala, after Sagi found new Leads in «נורצ'ר»). Its kill switch had stopped only what it *sent*: its intake still polled the board every few minutes, stamped new cards, and its one-day timeout moved them to «נורצ'ר». Seen live: `/internal/poll` → `runIntake` still running on 31.10.

@@ -8,6 +8,7 @@ import { handleTrigger } from './domain/buttons.js';
 import { handleCalcomWebhook } from './domain/calcom.js';
 import { isSwitchKey, readSwitches, setSwitch, SWITCHES, type SwitchKey } from './domain/switches.js';
 import { handleLeadReply, manychatCallbackToken } from './domain/lead-replies.js';
+import { handleLeadText, readManychatBody } from './domain/lead-text.js';
 import { runReminders } from './domain/reminders.js';
 import { enqueueWelcome, runWelcomeQueue } from './domain/welcome.js';
 
@@ -88,9 +89,15 @@ export function buildApp(deps: AppDeps): Hono {
   // ManyChat signs nothing, so the URL carries a secret, derived from CRON_SECRET.
   app.post('/webhooks/manychat', async (c) => {
     if (!tokenOk(c.req.query('token'), manychatCallbackToken(env))) return c.json({ error: 'forbidden' }, 403);
-    const body = await c.req.json().catch(() => null);
-    if (!body) return c.json({ error: 'invalid json' }, 400);
+    const raw = await c.req.text();
+    const body = readManychatBody(raw);
+    if (!body) {
+      await log('manychat_unreadable', null, { raw: raw.slice(0, 500) });
+      return c.json({ error: 'invalid json' }, 400);
+    }
     await db.query('insert into webhook_inbox (source, payload) values ($1, $2)', ['manychat', JSON.stringify(body)]);
+    // A typed message (the Default Reply), or a button on a reminder.
+    if (body.event === 'text') return c.json(await handleLeadText(deps, body));
     return c.json(await handleLeadReply(deps, body));
   });
 

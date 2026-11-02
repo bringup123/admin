@@ -15,6 +15,9 @@ export const SWITCHES = {
   no_answer_5: { default: false, he: 'כפתור «5 שיחות לא נענו»' },
   reminder_day: { default: false, he: 'תזכורת יום לפני פגישה (אפיון ודמו)' },
   reminder_hour: { default: false, he: 'תזכורת שעה לפני פגישה, עם לינק ה-Meet' },
+  /** The thank-you ManyChat sends a Lead who types a message (the words go
+   *  onto the card whatever this says). */
+  text_reply: { default: false, he: 'תשובה אוטומטית לליד שכתב הודעה' },
   /** The cage. On: only numbers on PHONE_ALLOWLIST, even in production. */
   allowlist_only: { default: true, he: 'רק למספרים ברשימת הבדיקה' },
 } as const;
