@@ -28,7 +28,7 @@ describe('a Lead who types in WhatsApp', () => {
     expect((await (await send(h, text('30', 'שלום'))).json()).ack).toBe('yes');
     expect(h.crm.updates.map((u) => u.text)).toEqual([
       'הליד כתב בוואטסאפ:\n«שלום»',
-      'נשלחה לליד תשובה אוטומטית: «תודה על ההודעה, הצוות שלנו יצור קשר בהקדם.»',
+      'נשלחה לליד תשובה אוטומטית: «תודה על ההודעה, הצוות שלנו יצור איתך קשר בהקדם.»',
     ]);
     h.clock.advance(5 * 60_000);
     expect(await (await send(h, text('30', 'רציתי לשאול על המחיר'))).json()).toMatchObject({ ack: 'no', ackReason: 'thanked_recently' });

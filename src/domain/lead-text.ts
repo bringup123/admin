@@ -11,7 +11,7 @@ import { readSwitches } from './switches.js';
 
 /** Ayala's wording, 2026-11-02. ManyChat sends it; it lives in the Default
  *  Reply flow, and is here so the card can say what the Lead was told. */
-export const THANK_YOU_HE = 'תודה על ההודעה, הצוות שלנו יצור קשר בהקדם.';
+export const THANK_YOU_HE = 'תודה על ההודעה, הצוות שלנו יצור איתך קשר בהקדם.';
 
 /** A Lead who writes three lines in a row is thanked once. */
 export const ACK_QUIET_MS = 12 * 60 * 60_000;
