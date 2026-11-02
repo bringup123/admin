@@ -63,6 +63,8 @@
 
 - **The two reminders switched on** (2026-11-02, Ayala's word). Their ManyChat flows exist (`v3_reminder_day`, `v3_reminder_hour`); whether published is Ayala's. **The board's old day-before reminder (workflow 1717270848 → webhook 157656773 → ManyChat «יום לפני פגישה») must go off now**, or a needs-mapping meeting gets two — this session cannot reach the board, so it is Ayala's.
 
+- **As built by Ayala (2026-11-02):** the day-before reminder has **one** quick reply, «מאשר/ת הגעה» — the «שינוי מועד» button was dropped; the hour-before has only the Meet link. The rep's card is filled as free text — the list columns are not used.
+
 ## Blockers and risks
 
 - **monday from the cloud session answers as another account** (above). Check the claude.ai monday connector and the environment.
