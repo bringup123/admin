@@ -67,6 +67,8 @@
 
 - **«5 שיחות לא נענו» switched on** (2026-11-02) — its template approved, Ayala. Every message V3 has is now live.
 
+- **2026-11-03: the welcome no longer moves the status.** The card stays «חדש»; the rep moves it to «בניסיונות תפיסה». Cards the welcome moved on 2.11 (from 13:39 on) still read «נשלחה הודעה ראשונה» — to put back by hand, or leave.
+
 ## Blockers and risks
 
 - **monday from the cloud session answers as another account** (above). Check the claude.ai monday connector and the environment.

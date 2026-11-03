@@ -3,7 +3,7 @@ import { enqueueWelcome, FIRST_DELAY_MS, GIVE_UP_AFTER_MS, RETRY_MS, runWelcomeQ
 import { card, harness } from './helpers.js';
 
 describe('the welcome message', () => {
-  it('waits before reading the card, then sends, moves the status and writes both links', async () => {
+  it('waits before reading the card, then sends and writes both links, and leaves the status «חדש»', async () => {
     const h = await harness();
     await h.on('interactions_enabled', 'welcome');
     h.crm.add(card({ id: '10' }));
@@ -13,27 +13,25 @@ describe('the welcome message', () => {
     expect(await runWelcomeQueue(h.deps)).toEqual([{ itemId: '10', outcome: 'sent' }]);
     expect(h.messenger.tags.map((t) => t.tag)).toEqual(['v3_welcome']);
     const c = h.crm.cards.get('10')!;
-    expect(c.status).toBe('נשלחה הודעה ראשונה');
+    expect(c.status).toBe('חדש');
+    expect(h.crm.writes.every((w) => w.write.status === undefined)).toBe(true);
     expect(c.meetingLink).toBe('https://cal.com/sagi/needs?name=%D7%93%D7%A0%D7%94+%D7%9B%D7%94%D7%9F&email=dana%40example.com&dafna_lead=10');
     expect(c.demoLink).toContain('https://cal.com/sagi/demo?');
     expect(c.demoLink).toContain('dafna_lead=10');
   });
 
-  it('a status label gone from the board costs the status only: the links are written and the card is not sent twice', async () => {
+  it('a sent card is not sent twice, however long it stays «חדש»', async () => {
     const h = await harness();
     await h.on('interactions_enabled', 'welcome');
-    h.crm.missingLabels.add('נשלחה הודעה ראשונה');
     h.crm.add(card({ id: '18' }));
     await enqueueWelcome(h.deps, '18');
     h.clock.advance(FIRST_DELAY_MS);
     expect(await runWelcomeQueue(h.deps)).toEqual([{ itemId: '18', outcome: 'sent' }]);
-    const c = h.crm.cards.get('18')!;
-    expect(c.status).toBe('חדש');
-    expect(c.meetingLink).toContain('dafna_lead=18');
+    // monday may report the card again; the queue and once-only both hold.
+    expect(await enqueueWelcome(h.deps, '18')).toBe(false);
     h.clock.advance(RETRY_MS * 3);
     expect(await runWelcomeQueue(h.deps)).toEqual([]);
-    const ev = await h.db.query<{ type: string }>("select type from events where type = 'label_missing'");
-    expect(ev.rows).toHaveLength(1);
+    expect(h.messenger.tags).toHaveLength(1);
   });
 
   it('queues a card once however many times monday says it was created', async () => {
@@ -67,7 +65,7 @@ describe('the welcome message', () => {
       { itemId: '17', outcome: 'sent' },
     ]);
     expect(h.crm.cards.get('16')!.status).toBe('הצעת מחיר');
-    expect(h.crm.cards.get('17')!.status).toBe('נשלחה הודעה ראשונה');
+    expect(h.crm.cards.get('17')!.status).toBe('');
   });
 
   it('waits for a phone that is filled after the card is created, and gives up after half an hour', async () => {

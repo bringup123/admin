@@ -4,6 +4,11 @@ All material changes to the project, newest first.
 Format follows [Keep a Changelog](https://keepachangelog.com/); written in business language, readable by a non-technical reader.
 Categories: **Added** / **Changed** / **Fixed** / **Removed**.
 
+## 2026-11-03 — A new Lead stays «חדש»
+
+### Changed
+- **The welcome no longer changes the Lead's status.** The card stays «חדש», and the rep moves it to «בניסיונות תפיסה» when she starts calling. The card still says, in an update, that the welcome went.
+
 ## 2026-11-02 — Live for real Leads
 
 ### Changed

@@ -1,4 +1,4 @@
-import { STATUS, WELCOME_OVERWRITES, WELCOME_STATUSES } from '../board.js';
+import { WELCOME_STATUSES } from '../board.js';
 import type { Card, CrmPort } from '../ports.js';
 import { cardBookingUrl } from './links.js';
 import { normalizePhone } from './phone.js';
@@ -122,15 +122,15 @@ export async function runWelcomeQueue(deps: WelcomeDeps, limit = 20): Promise<Ou
   return out;
 }
 
-/** The card after its welcome: the status moves, if it still says «new», and
- *  the card's own booking links go into empty cells. */
+/** The card after its welcome: the card's own booking links go into empty
+ *  cells. The status is not touched: it stays «חדש» and the rep moves it to
+ *  «בניסיונות תפיסה» herself (Ayala, 2026-11-03 — it was «נשלחה הודעה ראשונה»,
+ *  Sagi's brief part 2). */
 async function afterWelcome(deps: WelcomeDeps, card: Card): Promise<void> {
-  const { crm, env, db } = deps;
+  const { crm, env } = deps;
   const itemId = card.id;
   const lead = { itemId, name: card.name, email: card.email };
-  const written = await crm.updateCard(itemId, {
-    // A status a person (or a booking) set is theirs.
-    ...(WELCOME_OVERWRITES.includes(card.status) ? { status: STATUS.firstMessageSent } : {}),
+  await crm.updateCard(itemId, {
     // The card's own links, so a meeting booked from the card lands on it.
     ...(!card.meetingLink && env.bookingUrl
       ? { meetingLink: { url: cardBookingUrl(env.bookingUrl, env, lead), text: BOOKING_LINK_TEXT } }
@@ -139,12 +139,5 @@ async function afterWelcome(deps: WelcomeDeps, card: Card): Promise<void> {
       ? { demoLink: { url: cardBookingUrl(env.demoBookingUrl, env, lead), text: DEMO_LINK_TEXT } }
       : {}),
   });
-  if (written.refusedLabels?.length) {
-    await db.query('insert into events (type, monday_item_id, payload) values ($1, $2, $3)', [
-      'label_missing',
-      itemId,
-      JSON.stringify({ labels: written.refusedLabels }),
-    ]);
-  }
   await crm.postUpdate(itemId, 'נשלחה הודעת ברוכים הבאים בוואטסאפ.');
 }

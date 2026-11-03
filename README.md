@@ -2,7 +2,7 @@
 
 BringUp's lead process from 2026-10-25: **an external sales rep (נציגה) calls the Leads on the monday CRM and books meetings into Sagi's calendar.** The system around her does three things only:
 
-1. **Welcomes every new Lead** with one WhatsApp from the business line — who BringUp is, that a rep will call, TheMarker article, and Sagi's booking link. The card moves to «נשלחה הודעה ראשונה».
+1. **Welcomes every new Lead** with one WhatsApp from the business line — who BringUp is, that a rep will call, TheMarker article, and Sagi's booking link. The card keeps its status «חדש»; an update on it says the message went.
 2. **Gives the rep a clean card** on the CRM — the fields she fills, mostly from lists — and a view of her own.
 3. **Two buttons for a Lead who does not answer,** pressed by the rep: after three unanswered calls, a WhatsApp with two articles and the booking link; after five, a last message with one more article, and the card goes to «לבדיקת שגיא» with closure reason «לא ענה».
 

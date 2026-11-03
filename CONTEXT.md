@@ -9,7 +9,7 @@ _Avoid_: agent, Dafna (Dafna was the AI caller, stopped).
 
 **Card** (כרטסת): what the rep sees when she opens a Lead — the fields she fills and nothing else. On the board: the «נציגה» view.
 
-**Welcome message** (הודעת ברוכים הבאים): the one WhatsApp every new Lead gets from the business line, in Sagi's words: who BringUp is, that a rep will call, the TheMarker article, and Sagi's booking link. After it, the Lead is «נשלחה הודעה ראשונה».
+**Welcome message** (הודעת ברוכים הבאים): the one WhatsApp every new Lead gets from the business line, in Sagi's words: who BringUp is, that a rep will call, the TheMarker article, and Sagi's booking link. It does not move the Lead's status: the Lead stays «חדש» until the rep moves it.
 _Avoid_: first touch, choice message (Dafna's, with three buttons — not this).
 
 **Attempt** (ניסיון): one call by the rep. Counted by her, on the card, 1–5.

@@ -4,6 +4,14 @@ Every material architectural or product decision is recorded here **the moment i
 
 ---
 
+## 2026-11-03 — The welcome leaves the status «חדש»
+
+- **Decision:** after the welcome, the card's status is not changed. It stays «חדש»; the rep moves it to «בניסיונות תפיסה» by hand. (Ayala.) Overrides Sagi's brief, part 2 («אחרי השליחה הסטטוס מתעדכן ל"נשלחה הודעה ראשונה"») and follows his later word to her: «רק להכניס לידים לסטטוס חדש וזה הכל».
+- **What still says the message went:** the update on the card («נשלחה הודעת ברוכים הבאים בוואטסאפ.»), the booking links in their cells, and the ManyChat contact.
+- **Unchanged:** a card still on «נשלחה הודעה ראשונה» (from before) counts as new for the welcome, so nothing about old cards moves.
+
+---
+
 ## 2026-11-02 — The cage is opened: V3 messages real Leads
 
 - **Decision:** `allowlist_only` off (Ayala: «I want everything we built active, not only test numbers»). Live from then on: the welcome to every new Lead, the «3 שיחות לא נענו» button, and the thank-you to a Lead who types. Still off because their ManyChat half is not confirmed ready: `no_answer_5`, `reminder_day`, `reminder_hour`.
