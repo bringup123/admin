@@ -46,6 +46,19 @@ cal.com webhook, **one per event type** (not user-level) → `POST /webhooks/cal
 
 Every booking and move is also copied onto the Lead's ManyChat contact, if there is one (`V3_Meeting_When`, `V3_Meeting_Type`, `V3_Meeting_Link`, `V3_Meet_Code`, `V3_Booking_Uid`) — nothing is sent. A booking finds its card by the hidden question `dafna_lead` (the card id, carried by every link V3 writes or sends), then by the attendee's email. Unmatched bookings are logged. No WhatsApp is sent at the moment of booking (cal.com's own email invitation goes regardless).
 
+### A meeting changed by hand on the board (`src/domain/board-edits.ts`, 2026-11-04)
+
+monday webhooks on «תאריך פגישת אפיון», «לינק לפגישה», «תאריך פגישת דמו» and «לינק לפגישת דמו» (`change_specific_column_value`, registered from the live service by `GET /api/monday-webhooks?token=<admin>&apply=1`). The card is re-read and compared with V3's booking for that meeting type:
+
+- **the same** → an echo of V3's own write, ignored;
+- **a new date and time** → the booking moves (the reminders follow; it counts as booked now, so a reminder whose moment passed is not sent late) and ManyChat's fields are rewritten;
+- **the date cleared** → the booking is `cleared_by_hand`; no reminders;
+- **a date with no time** → no reminders, and the card says to add a time;
+- **a Meet link pasted** → the room the hour-before sends;
+- **a future date on a card with no booking** (a meeting arranged by telephone) → a `manual-…` booking with reminders.
+
+Each writes an update on the card, which also says that **cal.com and Sagi's calendar did not change** — V3 does not move the real meeting.
+
 ### Meeting reminders (`src/domain/reminders.ts`, 2026-10-26)
 
 Two WhatsApps before every needs-mapping and demo meeting — **a day before** and **an hour before**, the second with a button into the Google Meet room. Nothing is scheduled ahead: every tick reads `v3.bookings` for meetings in the next 25 hours, so a cancelled booking is simply not there and a moved one carries its new time. `v3.reminders` is the claim, one row per booking, reminder and meeting time, written before anything is sent.

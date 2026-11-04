@@ -10,6 +10,10 @@ export interface Card {
   trigger: string;
   meetingLink: string;
   demoLink: string;
+  /** The two meeting-date cells: an ISO instant when the cell has a time, the
+   *  bare day (YYYY-MM-DD) when it has none, '' when empty. */
+  meetingDate?: string;
+  demoDate?: string;
   createdAt?: string;
 }
 

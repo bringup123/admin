@@ -4,6 +4,15 @@ Every material architectural or product decision is recorded here **the moment i
 
 ---
 
+## 2026-11-04 — A meeting changed on the board moves its reminders
+
+- **Decision:** a person's change to a meeting's date or link on the board is copied to V3's booking — the reminders and ManyChat follow it (Ayala). A future date on a card with no booking becomes a manual meeting with reminders.
+- **One way only:** cal.com and Sagi's calendar are not changed; the update on the card says so. Moving the real meeting stays a cal.com action.
+- **Echoes by comparison, not by author:** V3 writes the same cells, with the same token a person on Aleksei's seat would use, so a cell that already matches the booking is V3's own write coming back.
+- **Rejected:** rescheduling the cal.com booking from the board — a second writer to Sagi's diary, and the Lead would get cal.com's reschedule email for a change they did not make.
+
+---
+
 ## 2026-11-03 — The welcome leaves the status «חדש»
 
 - **Decision:** after the welcome, the card's status is not changed. It stays «חדש»; the rep moves it to «בניסיונות תפיסה» by hand. (Ayala.) Overrides Sagi's brief, part 2 («אחרי השליחה הסטטוס מתעדכן ל"נשלחה הודעה ראשונה"») and follows his later word to her: «רק להכניס לידים לסטטוס חדש וזה הכל».

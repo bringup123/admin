@@ -278,8 +278,8 @@ async function matchByEmail(deps: CalcomDeps, ev: CalcomEvent): Promise<string |
  *  they send, so a contact with two meetings is reminded of the right one.
  *  Nothing is sent, and a contact is never created here: a Lead V3 has never
  *  messaged has none, and gets one with their first message. */
-async function meetingToContact(
-  deps: CalcomDeps,
+export async function meetingToContact(
+  deps: Pick<CalcomDeps, 'db' | 'env' | 'messenger'>,
   itemId: string,
   meeting: Meeting,
   start: Date,

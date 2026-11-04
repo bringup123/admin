@@ -37,6 +37,20 @@ function linkUrl(cells: Cell[], id: string): string {
   }
 }
 
+/** A date cell's value is `{ date, time }`, the time in UTC; a cell with no
+ *  time is a day, not a moment. */
+function dateOf(cells: Cell[], id: string): string {
+  const cell = cells.find((c) => c.id === id);
+  if (!cell?.value) return '';
+  try {
+    const v = JSON.parse(cell.value) as { date?: string; time?: string | null };
+    if (!v.date) return '';
+    return v.time ? new Date(`${v.date}T${v.time}Z`).toISOString() : v.date;
+  } catch {
+    return '';
+  }
+}
+
 /** Monday takes date+time in UTC and shows it in the account's timezone. */
 function dateCell(iso: string): { date: string; time: string } {
   const d = new Date(iso).toISOString();
@@ -54,11 +68,13 @@ function toCard(item: { id: string; name: string; created_at: string | null; col
     trigger: cellText(cells, COL.trigger),
     meetingLink: linkUrl(cells, COL.meetingLink),
     demoLink: linkUrl(cells, COL.demoLink),
+    meetingDate: dateOf(cells, COL.meetingDate),
+    demoDate: dateOf(cells, COL.demoDate),
     ...(item.created_at ? { createdAt: item.created_at } : {}),
   };
 }
 
-const CARD_COLUMNS = [COL.phone, COL.email, COL.status, COL.trigger, COL.meetingLink, COL.demoLink];
+const CARD_COLUMNS = [COL.phone, COL.email, COL.status, COL.trigger, COL.meetingLink, COL.demoLink, COL.meetingDate, COL.demoDate];
 
 export function mondayCrm(cfg: { token: string; boardId: string }): CrmPort {
   async function gql<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {

@@ -10,6 +10,8 @@ import { isSwitchKey, readSwitches, setSwitch, SWITCHES, type SwitchKey } from '
 import { handleLeadReply, manychatCallbackToken } from './domain/lead-replies.js';
 import { handleLeadText, readManychatBody } from './domain/lead-text.js';
 import { runFillLinks } from './domain/fill-links.js';
+import { handleMeetingEdit, MEETING_COLUMNS } from './domain/board-edits.js';
+import { ensureColumnWebhooks } from './adapters/monday-webhooks.js';
 import { runReminders } from './domain/reminders.js';
 import { enqueueWelcome, runWelcomeQueue } from './domain/welcome.js';
 
@@ -52,6 +54,7 @@ export function buildApp(deps: AppDeps): Hono {
     if (!itemId) return c.json({ outcome: 'ignored', reason: 'no item' });
     const columnId = ev.columnId ?? ev.column_id;
     if (columnId === COL.trigger) return c.json(await handleTrigger(deps, itemId));
+    if (typeof columnId === 'string' && MEETING_COLUMNS[columnId]) return c.json(await handleMeetingEdit(deps, itemId, columnId));
     // Only two webhooks point here; the one without a column is the new card
     // (`create_pulse`) — the same test the dafna service has used since 2026-08.
     if (ev.type === 'create_pulse' || !columnId) {
@@ -143,6 +146,23 @@ export function buildApp(deps: AppDeps): Hono {
     const result = await runFillLinks(deps, { apply, limit, ...(cursor ? { cursor } : {}), includeClosed: c.req.query('closed') === '1' });
     if (apply) await log('links_filled', null, { filled: result.filled, checked: result.checked });
     return c.json(result);
+  });
+
+  // The webhooks on the four meeting columns (src/domain/board-edits.ts),
+  // registered from here because this is where the board's token is. Admin
+  // token; without apply=1 it only reads.
+  app.get('/api/monday-webhooks', async (c) => {
+    if (!tokenOk(c.req.query('token'), env.adminToken)) return c.json({ error: 'forbidden' }, 403);
+    const origin = new URL(c.req.url).origin.replace(/^http:\/\/(?!localhost|127\.0\.0\.1)/, 'https://');
+    const plan = await ensureColumnWebhooks({
+      token: env.mondayApiToken,
+      boardId: env.mondayBoardId,
+      url: `${origin}/webhooks/monday?token=${encodeURIComponent(env.mondayWebhookSecret)}`,
+      columns: Object.entries(MEETING_COLUMNS).map(([columnId, m]) => ({ columnId, what: `${m.meeting} ${m.kind}` })),
+      apply: c.req.query('apply') === '1',
+    });
+    if (plan.wanted.some((w) => w.created)) await log('monday_webhooks_created', null, plan.wanted);
+    return c.json(plan);
   });
 
   app.get('/switch', async (c) => {

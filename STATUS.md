@@ -71,6 +71,8 @@
 
 - **2026-11-04: booking links on every card.** Cards from before V3 had no demo link (Ayala, card «ארז»). Now a button press writes both links into empty cells, and `/api/fill-links` fills the existing open cards from the live service (this session still cannot reach the board). **Run 2026-11-04: 89 open cards filled** (58 «נקבעה פגישה», 23 «בניסיונות תפיסה», 4 «הצעת מחיר», 4 «ליד קר»); 1067 closed cards left without.
 
+- **2026-11-04: a meeting changed by hand on the board now moves its reminders** (date, time, cleared date, pasted Meet link, or a meeting entered by hand with no booking). One way: cal.com and Sagi's calendar are not changed. Needs four monday webhooks, registered from the live service.
+
 ## Blockers and risks
 
 - **monday from the cloud session answers as another account** (above). Check the claude.ai monday connector and the environment.

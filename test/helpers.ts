@@ -59,6 +59,8 @@ export class FakeCrm implements CrmPort {
     if (write.trigger === null) c.trigger = '';
     if (write.meetingLink !== undefined) c.meetingLink = write.meetingLink?.url ?? '';
     if (write.demoLink !== undefined) c.demoLink = write.demoLink?.url ?? '';
+    if (write.meetingDate !== undefined) c.meetingDate = write.meetingDate ?? '';
+    if (write.demoDate !== undefined) c.demoDate = write.demoDate ?? '';
     return refusedLabels.length ? { refusedLabels } : {};
   }
   async findCardByEmail(email: string) {

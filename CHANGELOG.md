@@ -4,6 +4,11 @@ All material changes to the project, newest first.
 Format follows [Keep a Changelog](https://keepachangelog.com/); written in business language, readable by a non-technical reader.
 Categories: **Added** / **Changed** / **Fixed** / **Removed**.
 
+## 2026-11-04 — A meeting changed on the board updates its reminders
+
+### Added
+- **Changing a meeting by hand on the board now counts.** A new date or time moves the Lead's reminders; a deleted date stops them; a pasted meeting link is the one the hour-before reminder sends; and a meeting entered by hand, without the calendar, gets reminders too. The calendar itself is not changed — the card says so each time.
+
 ## 2026-11-04 — Every open Lead has its own booking links
 
 ### Fixed
