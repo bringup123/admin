@@ -4,6 +4,11 @@ All material changes to the project, newest first.
 Format follows [Keep a Changelog](https://keepachangelog.com/); written in business language, readable by a non-technical reader.
 Categories: **Added** / **Changed** / **Fixed** / **Removed**.
 
+## 2026-11-04 — Every open Lead has its own booking links
+
+### Fixed
+- **Older cards had no demo-meeting link.** Every open Lead now carries its own two links — the needs-mapping meeting and the demo — and a card the rep presses a button on gets them too. A link already on a card is never replaced.
+
 ## 2026-11-03 — A new Lead stays «חדש»
 
 ### Changed

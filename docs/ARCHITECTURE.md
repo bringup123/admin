@@ -30,6 +30,10 @@ monday has **no webhook for a button press** (proved in the dafna project) — a
 4. After the five-calls message: status «לבדיקת שגיא», «סיבת סגירה» = «לא ענה».
 5. Whatever happened is written on the card as an update, in Hebrew, so the rep sees why a press did or did not send.
 
+### The card's own booking links
+
+«לינק לפגישה» and «לינק לפגישת דמו» carry the card's own cal.com links (`?dafna_lead=<id>`, name and email prefilled), written into **empty cells only** (`fillCardLinks`, `src/domain/welcome.ts`): after the welcome, on every press of either button (sent or not), and — for cards from before V3 — by `GET /api/fill-links?token=<admin>` (`&apply=1` to write, `&cursor=` for the next page, `&limit=` up to 50, `&closed=1` to include closed Leads; dry run by default). Closed Leads (`CLOSED_STATUSES`) are skipped.
+
 ### Bookings
 
 cal.com webhook, **one per event type** (not user-level) → `POST /webhooks/calcom`, HMAC-signed.

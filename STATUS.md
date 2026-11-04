@@ -69,6 +69,8 @@
 
 - **2026-11-03: the welcome no longer moves the status.** The card stays «חדש»; the rep moves it to «בניסיונות תפיסה». Cards the welcome moved on 2.11 (from 13:39 on) still read «נשלחה הודעה ראשונה» — to put back by hand, or leave.
 
+- **2026-11-04: booking links on every card.** Cards from before V3 had no demo link (Ayala, card «ארז»). Now a button press writes both links into empty cells, and `/api/fill-links` fills the existing open cards from the live service (this session still cannot reach the board).
+
 ## Blockers and risks
 
 - **monday from the cloud session answers as another account** (above). Check the claude.ai monday connector and the environment.

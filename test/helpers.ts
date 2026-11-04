@@ -68,6 +68,12 @@ export class FakeCrm implements CrmPort {
   async postUpdate(itemId: string, text: string) {
     this.updates.push({ itemId, text });
   }
+  async listCardsWithoutDemoLink({ cursor, limit }: { cursor?: string; limit: number }) {
+    const all = [...this.cards.values()].filter((c) => !c.demoLink);
+    const start = cursor ? Number(cursor) : 0;
+    const page = all.slice(start, start + limit);
+    return { cards: page.map((c) => ({ ...c })), cursor: start + limit < all.length ? String(start + limit) : null };
+  }
   lastWrite(itemId: string): CardWrite | undefined {
     return [...this.writes].reverse().find((w) => w.itemId === itemId)?.write;
   }

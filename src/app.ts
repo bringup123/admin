@@ -9,6 +9,7 @@ import { handleCalcomWebhook } from './domain/calcom.js';
 import { isSwitchKey, readSwitches, setSwitch, SWITCHES, type SwitchKey } from './domain/switches.js';
 import { handleLeadReply, manychatCallbackToken } from './domain/lead-replies.js';
 import { handleLeadText, readManychatBody } from './domain/lead-text.js';
+import { runFillLinks } from './domain/fill-links.js';
 import { runReminders } from './domain/reminders.js';
 import { enqueueWelcome, runWelcomeQueue } from './domain/welcome.js';
 
@@ -130,6 +131,18 @@ export function buildApp(deps: AppDeps): Hono {
     const inbox = await db.query('select id, source, payload, received_at from webhook_inbox order by id desc limit 10');
     const messages = await db.query('select id, monday_item_id, kind, status, error, created_at, sent_at from messages order by id desc limit 20');
     return c.json({ events: events.rows, queue: queue.rows, messages: messages.rows, inbox: inbox.rows });
+  });
+
+  // The booking links onto cards from before V3, one page per call. Admin
+  // token. Without apply=1 it only counts.
+  app.get('/api/fill-links', async (c) => {
+    if (!tokenOk(c.req.query('token'), env.adminToken)) return c.json({ error: 'forbidden' }, 403);
+    const limit = Math.min(Math.max(Number(c.req.query('limit') ?? 25) || 25, 1), 50);
+    const apply = c.req.query('apply') === '1';
+    const cursor = c.req.query('cursor') || undefined;
+    const result = await runFillLinks(deps, { apply, limit, ...(cursor ? { cursor } : {}), includeClosed: c.req.query('closed') === '1' });
+    if (apply) await log('links_filled', null, { filled: result.filled, checked: result.checked });
+    return c.json(result);
   });
 
   app.get('/switch', async (c) => {

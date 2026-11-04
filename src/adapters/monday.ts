@@ -43,6 +43,23 @@ function dateCell(iso: string): { date: string; time: string } {
   return { date: d.slice(0, 10), time: d.slice(11, 19) };
 }
 
+function toCard(item: { id: string; name: string; created_at: string | null; column_values: Cell[] }): Card {
+  const cells = item.column_values;
+  return {
+    id: item.id,
+    name: item.name ?? '',
+    phone: phoneOf(cells),
+    email: cellText(cells, COL.email),
+    status: cellText(cells, COL.status),
+    trigger: cellText(cells, COL.trigger),
+    meetingLink: linkUrl(cells, COL.meetingLink),
+    demoLink: linkUrl(cells, COL.demoLink),
+    ...(item.created_at ? { createdAt: item.created_at } : {}),
+  };
+}
+
+const CARD_COLUMNS = [COL.phone, COL.email, COL.status, COL.trigger, COL.meetingLink, COL.demoLink];
+
 export function mondayCrm(cfg: { token: string; boardId: string }): CrmPort {
   async function gql<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
     const res = await fetch(API, {
@@ -69,19 +86,29 @@ export function mondayCrm(cfg: { token: string; boardId: string }): CrmPort {
       const item = data.items[0];
       // Item ids are global: an id from another board is not one of our Leads.
       if (!item || item.board?.id !== cfg.boardId) return null;
-      const cells = item.column_values;
-      const card: Card = {
-        id: item.id,
-        name: item.name ?? '',
-        phone: phoneOf(cells),
-        email: cellText(cells, COL.email),
-        status: cellText(cells, COL.status),
-        trigger: cellText(cells, COL.trigger),
-        meetingLink: linkUrl(cells, COL.meetingLink),
-        demoLink: linkUrl(cells, COL.demoLink),
-        ...(item.created_at ? { createdAt: item.created_at } : {}),
-      };
-      return card;
+      return toCard(item);
+    },
+
+    async listCardsWithoutDemoLink({ cursor, limit }) {
+      type Page = { cursor: string | null; items: Array<{ id: string; name: string; created_at: string | null; column_values: Cell[] }> };
+      const fields = `cursor items { id name created_at column_values(ids: $cols) { id text value } }`;
+      if (cursor) {
+        const data = await gql<{ next_items_page: Page }>(
+          `query ($cursor: String!, $limit: Int!, $cols: [String!]) { next_items_page(cursor: $cursor, limit: $limit) { ${fields} } }`,
+          { cursor, limit, cols: CARD_COLUMNS }
+        );
+        return { cards: data.next_items_page.items.map(toCard), cursor: data.next_items_page.cursor };
+      }
+      const data = await gql<{ boards: Array<{ items_page: Page }> }>(
+        `query ($board: [ID!], $limit: Int!, $cols: [String!], $col: ID!) {
+           boards(ids: $board) { items_page(limit: $limit, query_params: {
+             rules: [{ column_id: $col, compare_value: [], operator: is_empty }],
+             order_by: [{ column_id: "__creation_log__", direction: desc }] }) { ${fields} } }
+         }`,
+        { board: [cfg.boardId], limit, cols: CARD_COLUMNS, col: COL.demoLink }
+      );
+      const page = data.boards[0]?.items_page ?? { cursor: null, items: [] };
+      return { cards: page.items.map(toCard), cursor: page.cursor };
     },
 
     async updateCard(itemId, w: CardWrite) {

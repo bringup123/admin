@@ -1,6 +1,6 @@
 import { CLOSE_REASON_NO_ANSWER, STATUS, TRIGGER_LABELS } from '../board.js';
 import { REFUSAL_HE, sendMessage } from './send.js';
-import type { WelcomeDeps } from './welcome.js';
+import { fillCardLinks, type WelcomeDeps } from './welcome.js';
 
 // The rep's two buttons (Sagi's brief, part 5). monday has no webhook for a
 // button press, so each button's automation writes a label into «טריגר נציגה»
@@ -36,6 +36,17 @@ export async function handleTrigger(deps: WelcomeDeps, itemId: string): Promise<
     return { outcome: 'ignored', reason: 'unknown_label' };
   }
 
+  // A Lead the rep is calling has the card's own booking links, whether or
+  // not the message goes (a card from before V3 has none).
+  try {
+    await fillCardLinks(deps, card);
+  } catch (err) {
+    await db.query('insert into events (type, monday_item_id, payload) values ($1, $2, $3)', [
+      'links_write_failed',
+      itemId,
+      JSON.stringify({ error: err instanceof Error ? err.message.slice(0, 300) : String(err) }),
+    ]);
+  }
   const result = await sendMessage(deps, { kind, itemId, rawPhone: card.phone, cardName: card.name });
   if (!result.sent) {
     await crm.postUpdate(itemId, `לחיצה על «${card.trigger}»: ${REFUSAL_HE[result.reason]}`);

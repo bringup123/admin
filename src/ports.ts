@@ -33,6 +33,8 @@ export interface CrmPort {
    *  are a person's to change, and a renamed label must not lose a date. */
   updateCard(itemId: string, write: CardWrite): Promise<{ refusedLabels?: string[] }>;
   findCardByEmail(email: string): Promise<string | null>;
+  /** One page of cards whose demo-link cell is empty, newest first. */
+  listCardsWithoutDemoLink(input: { cursor?: string; limit: number }): Promise<{ cards: Card[]; cursor: string | null }>;
   /** An update on the card, so a person reads what happened. */
   postUpdate(itemId: string, text: string): Promise<void>;
 }

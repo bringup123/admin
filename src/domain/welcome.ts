@@ -127,17 +127,27 @@ export async function runWelcomeQueue(deps: WelcomeDeps, limit = 20): Promise<Ou
  *  «בניסיונות תפיסה» herself (Ayala, 2026-11-03 — it was «נשלחה הודעה ראשונה»,
  *  Sagi's brief part 2). */
 async function afterWelcome(deps: WelcomeDeps, card: Card): Promise<void> {
-  const { crm, env } = deps;
+  await fillCardLinks(deps, card);
+  await deps.crm.postUpdate(card.id, 'נשלחה הודעת ברוכים הבאים בוואטסאפ.');
+}
+
+/** The card's own booking links — needs-mapping and demo — into whichever of
+ *  the two cells is empty. A link already there (a meeting room, a link a
+ *  person pasted) is never replaced. Returns what it wrote. */
+export async function fillCardLinks(
+  deps: Pick<WelcomeDeps, 'crm' | 'env'>,
+  card: Card
+): Promise<{ meetingLink: boolean; demoLink: boolean }> {
+  const { env } = deps;
   const itemId = card.id;
   const lead = { itemId, name: card.name, email: card.email };
-  await crm.updateCard(itemId, {
+  const meetingLink = !card.meetingLink && !!env.bookingUrl;
+  const demoLink = !card.demoLink && !!env.demoBookingUrl;
+  if (!meetingLink && !demoLink) return { meetingLink, demoLink };
+  await deps.crm.updateCard(itemId, {
     // The card's own links, so a meeting booked from the card lands on it.
-    ...(!card.meetingLink && env.bookingUrl
-      ? { meetingLink: { url: cardBookingUrl(env.bookingUrl, env, lead), text: BOOKING_LINK_TEXT } }
-      : {}),
-    ...(!card.demoLink && env.demoBookingUrl
-      ? { demoLink: { url: cardBookingUrl(env.demoBookingUrl, env, lead), text: DEMO_LINK_TEXT } }
-      : {}),
+    ...(meetingLink ? { meetingLink: { url: cardBookingUrl(env.bookingUrl!, env, lead), text: BOOKING_LINK_TEXT } } : {}),
+    ...(demoLink ? { demoLink: { url: cardBookingUrl(env.demoBookingUrl!, env, lead), text: DEMO_LINK_TEXT } } : {}),
   });
-  await crm.postUpdate(itemId, 'נשלחה הודעת ברוכים הבאים בוואטסאפ.');
+  return { meetingLink, demoLink };
 }
