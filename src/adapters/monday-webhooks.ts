@@ -47,3 +47,20 @@ export async function ensureColumnWebhooks(cfg: {
   }
   return plan;
 }
+
+/** The board's columns, and one card's raw cells — read-only, for checking
+ *  from the live service what the board really holds. */
+export async function readBoard(cfg: { token: string; boardId: string; itemId?: string }): Promise<unknown> {
+  const res = await fetch(API, {
+    method: 'POST',
+    headers: { authorization: cfg.token, 'content-type': 'application/json', 'API-Version': '2024-10' },
+    body: JSON.stringify({
+      query: `query ($b: [ID!], $i: [ID!]) {
+        boards(ids: $b) { columns { id title type archived } }
+        items(ids: $i) { id name column_values { id text value } }
+      }`,
+      variables: { b: [cfg.boardId], i: cfg.itemId ? [cfg.itemId] : [] },
+    }),
+  });
+  return res.json();
+}

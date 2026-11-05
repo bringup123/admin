@@ -11,7 +11,7 @@ import { handleLeadReply, manychatCallbackToken } from './domain/lead-replies.js
 import { handleLeadText, readManychatBody } from './domain/lead-text.js';
 import { runFillLinks } from './domain/fill-links.js';
 import { handleMeetingEdit, MEETING_COLUMNS } from './domain/board-edits.js';
-import { ensureColumnWebhooks } from './adapters/monday-webhooks.js';
+import { ensureColumnWebhooks, readBoard } from './adapters/monday-webhooks.js';
 import { runReminders } from './domain/reminders.js';
 import { enqueueWelcome, runWelcomeQueue } from './domain/welcome.js';
 
@@ -163,6 +163,13 @@ export function buildApp(deps: AppDeps): Hono {
     });
     if (plan.wanted.some((w) => w.created)) await log('monday_webhooks_created', null, plan.wanted);
     return c.json(plan);
+  });
+
+  // What the board holds, read from here. Admin token; reads only.
+  app.get('/api/board', async (c) => {
+    if (!tokenOk(c.req.query('token'), env.adminToken)) return c.json({ error: 'forbidden' }, 403);
+    const item = c.req.query('item');
+    return c.json(await readBoard({ token: env.mondayApiToken, boardId: env.mondayBoardId, ...(item && /^\d+$/.test(item) ? { itemId: item } : {}) }));
   });
 
   app.get('/switch', async (c) => {
