@@ -176,3 +176,21 @@ describe('POST /webhooks/calcom', () => {
     expect(h2.messenger.fields).toEqual([]);
   });
 });
+
+import { auditMeetings } from '../src/domain/audit.js';
+describe('the meeting audit', () => {
+  it('a booked card matches; a card a person blanked is named', async () => {
+    const h = await harness();
+    h.crm.add(card({ id: '30' }));
+    h.crm.add(card({ id: '31' }));
+    const future = { startTime: '2099-01-05T09:00:00Z', videoCallData: { url: 'https://meet.google.com/abc-defg-hij' } };
+    await handleCalcomWebhook(h.deps, booking({ ...future }));
+    await handleCalcomWebhook(h.deps, booking({ ...future, uid: 'u2', responses: { dafna_lead: '31' } }));
+    h.crm.cards.get('31')!.meetingChangeLink = '';
+    const rows = await auditMeetings(h.deps);
+    expect(rows.map((r) => [r.itemId, r.ok, r.problems])).toEqual([
+      ['30', true, []],
+      ['31', false, ['change/cancel link empty']],
+    ]);
+  });
+});

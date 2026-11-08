@@ -14,6 +14,8 @@ export interface Card {
    *  bare day (YYYY-MM-DD) when it has none, '' when empty. */
   meetingDate?: string;
   demoDate?: string;
+  /** The change-or-cancel link of the needs-mapping meeting. */
+  meetingChangeLink?: string;
   createdAt?: string;
 }
 

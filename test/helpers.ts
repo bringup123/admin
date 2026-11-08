@@ -60,6 +60,7 @@ export class FakeCrm implements CrmPort {
     if (write.meetingLink !== undefined) c.meetingLink = write.meetingLink?.url ?? '';
     if (write.demoLink !== undefined) c.demoLink = write.demoLink?.url ?? '';
     if (write.meetingDate !== undefined) c.meetingDate = write.meetingDate ?? '';
+    if (write.meetingChangeLink !== undefined) c.meetingChangeLink = write.meetingChangeLink?.url ?? '';
     if (write.demoDate !== undefined) c.demoDate = write.demoDate ?? '';
     return refusedLabels.length ? { refusedLabels } : {};
   }

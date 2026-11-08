@@ -70,11 +70,12 @@ function toCard(item: { id: string; name: string; created_at: string | null; col
     demoLink: linkUrl(cells, COL.demoLink),
     meetingDate: dateOf(cells, COL.meetingDate),
     demoDate: dateOf(cells, COL.demoDate),
+    meetingChangeLink: linkUrl(cells, COL.meetingChangeLink),
     ...(item.created_at ? { createdAt: item.created_at } : {}),
   };
 }
 
-const CARD_COLUMNS = [COL.phone, COL.email, COL.status, COL.trigger, COL.meetingLink, COL.demoLink, COL.meetingDate, COL.demoDate];
+const CARD_COLUMNS = [COL.phone, COL.email, COL.status, COL.trigger, COL.meetingLink, COL.demoLink, COL.meetingDate, COL.demoDate, COL.meetingChangeLink];
 
 export function mondayCrm(cfg: { token: string; boardId: string }): CrmPort {
   async function gql<T>(query: string, variables: Record<string, unknown> = {}): Promise<T> {
