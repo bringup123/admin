@@ -73,6 +73,8 @@
 
 - **2026-11-04: a meeting changed by hand on the board now moves its reminders** (date, time, cleared date, pasted Meet link, or a meeting entered by hand with no booking). One way: cal.com and Sagi's calendar are not changed. Needs four monday webhooks, registered from the live service.
 
+- **2026-11-08 audit (`/api/audit-meetings`):** cal.com has two upcoming meetings, both known to V3, both on the right card with date, Meet link and change/cancel link.
+
 ## Blockers and risks
 
 - **monday from the cloud session answers as another account** (above). Check the claude.ai monday connector and the environment.
